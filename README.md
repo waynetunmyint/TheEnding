@@ -29,3 +29,7 @@ Design phase. No app code yet.
 - VIP subscription unlocks every episode with no ads.
 - Daily check-in and tasks give free coins.
 - Sign in with Google (primary), email one-time code, or Apple on iPhone and iPad.
+
+## License
+
+[MIT](LICENSE). Free for everyone to use, copy, change and sell, as long as the copyright notice stays in.
