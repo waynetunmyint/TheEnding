@@ -17,7 +17,8 @@ All platforms live in this one repository.
 
 ## Status
 
-Design phase. No app code yet.
+- **Web mockup (dummy data): https://the-ending.connexbiz.com/** — viewer app at `/`, admin panel at `/admin` ([NextJS/](NextJS/)).
+- Go backend, Android and iOS apps: not started.
 
 - Screen design: complete in Claude Design (54 artboards). See [docs/DESIGN.md](docs/DESIGN.md) for the full screen inventory and progress.
 - Design source: [design/canvas/](design/canvas/) (Claude Design `.dc.html` artboards).

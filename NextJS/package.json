@@ -1,0 +1,27 @@
+{
+  "name": "the-ending-web",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint app src"
+  },
+  "dependencies": {
+    "next": "16.4.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.18.0",
+    "@types/react": "19.2.0",
+    "@types/react-dom": "19.2.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.2",
+    "typescript": "5.9.3"
+  }
+}
