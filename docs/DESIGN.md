@@ -130,4 +130,4 @@ Roles: Owner (everything), Editor (dramas, episodes, Home), Support (users, paym
 
 ## Build status
 
-The web app and admin panel are built on the Go + SQLite API for every route above (see the root README). Simulated in this build: email codes, Google sign-in, store checkout, rewarded ads and push delivery (notifications go to the in-app inbox). Not built yet: the Android and iOS apps, which own the Update dialog, Apple sign-in and the native push and store flows.
+The web app and admin panel are built on the Go + SQLite API for every route above (see the root README). Simulated in this build: email codes, Google sign-in, store checkout, rewarded ads and push delivery (notifications go to the in-app inbox). The Android (Kotlin) and iOS (Swift) apps cover every viewer screen above, including the Update dialog. Still to do for a store release: real sign-in (Google, Apple), Play Billing and StoreKit, an ad network, push, and the Meta SDK.

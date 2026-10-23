@@ -116,7 +116,7 @@ export function AdminEpisodes() {
             onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); void addFiles(e.dataTransfer.files) }}>
             <Icon name="upload" size={28} style={{ color: 'var(--text-2)' }} />
             <strong>Drop episode videos here</strong>
-            <span className="small faint" style={{ lineHeight: 1.5, maxWidth: 420 }}>Vertical 9:16 MP4, MOV or WebM, up to 500 MB each. Name files EP01.mp4, EP02.mp4… and they are numbered for you. New episodes start unpublished.</span>
+            <span className="small faint" style={{ lineHeight: 1.5, maxWidth: 420 }}>Vertical 9:16 MP4 (H.264) plays on every device; WebM doesn&apos;t play on iPhone. Up to 500 MB each. Name files EP01.mp4, EP02.mp4… and they are numbered for you. New episodes start unpublished.</span>
             <span className="btn btn-secondary btn-sm">Choose files</span>
             <input type="file" accept="video/mp4,video/quicktime,video/webm,.mp4,.m4v,.mov,.webm" multiple className="sr-only" onChange={(e) => { void addFiles(e.target.files); e.target.value = '' }} />
           </label>
