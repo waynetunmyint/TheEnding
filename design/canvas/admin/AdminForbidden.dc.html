@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin access denied</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+</style>
+</helmet>
+<div style="min-height: 900px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; display: flex; align-items: center; justify-content: center; padding: 40px 16px; box-sizing: border-box">
+<div role="alert" style="width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+<div style="width: 72px; height: 72px; border-radius: 36px; background: #1B1720; color: #B0A8B4; display: flex; align-items: center; justify-content: center">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></div>
+<h1 style="margin: 6px 0 0; font-size: 24px; font-weight: 800">This account isn't an admin</h1>
+<p style="margin: 0; font-size: 15px; color: #B0A8B4; line-height: 1.5">You're signed in as mya@example.com. Ask the owner to add you in Settings › Admins, or sign in with a different account.</p>
+<a href="AdminLogin.dc.html" style="margin-top: 8px; height: 46px; padding: 0 22px; border-radius: 23px; background: #E0245E; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; text-decoration: none">Use another account</a>
+<a href="/Home.dc.html" style="height: 44px; display: flex; align-items: center; font-size: 15px; font-weight: 600; text-decoration: none">Go to The Ending</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

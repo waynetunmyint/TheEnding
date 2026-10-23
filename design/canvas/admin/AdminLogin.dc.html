@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin sign in</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+</style>
+</helmet>
+<div style="min-height: 900px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; display: flex; align-items: center; justify-content: center; padding: 40px 16px; box-sizing: border-box">
+<div style="width: 100%; max-width: 380px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center">
+<img src="/_blob/7d3062d4b43e05109d1a29b393a0d350" alt="The Ending logo" style="width: 56px; height: 78px; object-fit: contain">
+<h1 style="margin: 6px 0 0; font-size: 26px; font-weight: 800">Admin sign in</h1>
+<p style="margin: 0 0 12px; font-size: 15px; color: #B0A8B4; line-height: 1.5">Only approved The Ending admins can open this panel.</p>
+<a href="AdminDashboard.dc.html" style="width: 100%; height: 50px; border-radius: 25px; background: #FFFFFF; color: #1A1A1A; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none">
+<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z" fill="#4285F4"></path><path d="M12 22c2.7 0 5-.9 6.6-2.5l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z" fill="#34A853"></path><path d="M6.4 13.9a6 6 0 0 1 0-3.8V7.5H3.1a10 10 0 0 0 0 9z" fill="#FBBC05"></path><path d="M12 6c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.5l3.3 2.6C7.2 7.8 9.4 6 12 6z" fill="#EA4335"></path></svg>
+Continue with Google</a>
+<a href="/LoginEmail.dc.html" style="width: 100%; height: 50px; border-radius: 25px; background: #1B1720; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg>
+Continue with email code</a>
+<p style="margin: 12px 0 0; font-size: 12px; color: #8E8794">Same accounts as the app. Admin access is granted in Settings › Admins.</p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

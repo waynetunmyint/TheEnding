@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin sidebar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+svg{display:block}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 100%; box-sizing: border-box; background: #141117; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; padding: 24px 12px; display: flex; flex-direction: column; gap: 24px">
+<a href="AdminDashboard.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 0 8px; color: #FFFFFF; text-decoration: none">
+<img src="/_blob/7d3062d4b43e05109d1a29b393a0d350" alt="" style="width: 26px; height: 36px; object-fit: contain">
+<span style="display: flex; flex-direction: column"><span style="font-size: 17px; font-weight: 900; letter-spacing: -0.4px">The Ending</span><span style="font-size: 12px; color: #8E8794">Admin</span></span>
+</a>
+<nav aria-label="Admin" style="display: flex; flex-wrap: wrap; gap: 2px">
+<sc-for list="{{ items }}" as="i" hint-placeholder-count="9">
+<a href="{{ i.href }}" aria-current="{{ i.current }}" style="flex: 1 1 200px; min-height: 40px; padding: 0 12px; border-radius: 10px; display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 14px; font-weight: {{ i.weight }}; color: {{ i.fg }}; background: {{ i.bg }}">
+<span style="flex: 1">{{ i.label }}</span>
+<sc-if value="{{ i.badge }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 10px; background: #E0245E; color: #FFFFFF; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center">{{ i.badge }}</span></sc-if>
+</a>
+</sc-for>
+</nav>
+<div style="margin-top: auto; padding: 12px 8px 0; border-top: 1px solid #221D26; display: flex; flex-direction: column; gap: 8px">
+<div style="font-size: 13px; font-weight: 600">Wayne Tun Myint</div>
+<div style="font-size: 12px; color: #8E8794">Owner</div>
+<div style="display: flex; gap: 14px; font-size: 13px">
+<a href="/Home.dc.html" style="color: #FF5C7A; text-decoration: none; min-height: 32px; display: flex; align-items: center">View site</a>
+<a href="AdminLogin.dc.html" style="color: #B0A8B4; text-decoration: none; min-height: 32px; display: flex; align-items: center">Sign out</a>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","options":["dashboard","dramas","home","users","payments","comments","monetization","notifications","settings"],"default":"dashboard"},"$preview":{"width":240,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const active = this.props.active ?? 'dashboard';
+    const defs = [
+      ['dashboard', 'Dashboard', 'AdminDashboard.dc.html', ''],
+      ['dramas', 'Dramas & episodes', 'AdminDramas.dc.html', ''],
+      ['home', 'Home curation', 'AdminHome.dc.html', ''],
+      ['users', 'Users', 'AdminUsers.dc.html', ''],
+      ['payments', 'Payments', 'AdminPayments.dc.html', '2'],
+      ['comments', 'Comments', 'AdminComments.dc.html', '5'],
+      ['monetization', 'Coins, VIP & rewards', 'AdminRewards.dc.html', ''],
+      ['notifications', 'Notifications', 'AdminPush.dc.html', ''],
+      ['settings', 'Settings', 'AdminSettings.dc.html', '']
+    ];
+    const items = defs.map(([k, label, href, badge]) => {
+      const on = k === active;
+      return { label, href, badge, current: on ? 'page' : 'false', weight: on ? 700 : 500, fg: on ? '#FFFFFF' : '#B0A8B4', bg: on ? '#2E1520' : 'transparent' };
+    });
+    return { items };
+  }
+}
+</script>
+</body>
+</html>

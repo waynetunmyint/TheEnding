@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin dramas empty</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+</style>
+</helmet>
+<div style="min-height: 900px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; display: flex; flex-wrap: wrap">
+<div style="flex: 1 1 220px; display: flex"><dc-import name="AdminNav" active="dramas" hint-size="100%,900px"></dc-import></div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; max-width: 1240px">
+<h1 style="margin: 0; font-size: 26px; font-weight: 800">Dramas</h1>
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 80px 16px">
+<div style="width: 72px; height: 72px; border-radius: 36px; background: #1B1720; color: #FF5C7A; display: flex; align-items: center; justify-content: center">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"></rect><path d="m10 9 5 3-5 3z"></path></svg></div>
+<h2 style="margin: 6px 0 0; font-size: 22px; font-weight: 800">Add your first drama</h2>
+<p style="margin: 0; max-width: 420px; font-size: 15px; color: #B0A8B4; line-height: 1.5">Create the drama, upload a poster, then drop in the episode videos. Viewers see it once you publish.</p>
+<a href="AdminDramaEdit.dc.html" style="margin-top: 8px; height: 46px; padding: 0 22px; border-radius: 23px; background: #E0245E; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; text-decoration: none">New drama</a>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

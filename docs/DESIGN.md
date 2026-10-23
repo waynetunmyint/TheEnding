@@ -1,7 +1,8 @@
 # The Ending — design inventory
 
-Every screen and state of the app, used as the design, build and UAT checklist.
+Every screen and state of the app and the admin panel, used as the design, build and UAT checklist.
 The web version uses the same design, laid out responsively (sidebar instead of bottom tabs on desktop).
+The admin panel lives in the same Next.js app under `/admin`.
 
 - Claude Design canvas: https://claude.ai/artifact/CmBkGN1cwCFK7XCVbX2AQ9
 - Canvas source in this repo: [design/canvas/](../design/canvas/)
@@ -15,7 +16,7 @@ The web version uses the same design, laid out responsively (sidebar instead of 
 
 ## Screens
 
-Status: ✅ designed (all 54 artboards, 23/10/2026)
+Status: ✅ designed (54 app artboards + 16 admin artboards, 23/10/2026)
 
 ### 1. Launch & sign-in
 | Artboard | Screen | Status |
@@ -94,6 +95,31 @@ Status: ✅ designed (all 54 artboards, 23/10/2026)
 | --- | --- | --- |
 | BottomBar | Subscription status bar on top of the tab bar | ✅ |
 | SubStates | Subscription bar, every state | ✅ |
+
+### 7. Admin panel (Next.js `/admin`)
+Desktop-first, responsive (the sidebar stacks above the content on a phone). Same palette as the app.
+Every `/admin` request is authorised by GoBackend admin roles; the Next.js route guard is only for UX.
+
+| Artboard | Route | Screen | Status |
+| --- | --- | --- | --- |
+| AdminLogin | `/admin/login` | Admin sign-in (Google, email code) | ✅ |
+| AdminForbidden | `/admin/*` (403) | Signed in but not an admin | ✅ |
+| AdminDashboard | `/admin` | Revenue, users, VIP, unlocks; needs-attention list; top dramas | ✅ |
+| AdminDramas | `/admin/dramas` | Drama list with search and status filter (Tweaks: loading, error) | ✅ |
+| AdminDramasEmpty | `/admin/dramas` | No dramas yet | ✅ |
+| AdminDramaEdit | `/admin/dramas/new`, `/admin/dramas/[id]` | Details, poster, banner, pricing, release, publish | ✅ |
+| AdminEpisodes | `/admin/dramas/[id]/episodes` | Bulk video upload queue, episode table, free/locked, publish | ✅ |
+| AdminHome | `/admin/home` | Banner, pinned trending, coming soon | ✅ |
+| AdminUsers | `/admin/users` | User search and filters | ✅ |
+| AdminUserDetail | `/admin/users/[id]` | Profile, coin activity, coin adjustment with reason, VIP, ban | ✅ |
+| AdminPayments | `/admin/payments` | Coin and VIP purchases, pending recheck, CSV export | ✅ |
+| AdminComments | `/admin/comments` | Reported queue: keep, hide, mute | ✅ |
+| AdminRewards | `/admin/monetization` | Episode defaults, coin packs, VIP plans, check-in and tasks | ✅ |
+| AdminPush | `/admin/notifications` | Compose, audience, schedule, preview, history | ✅ |
+| AdminSettings | `/admin/settings` | App min/latest versions, maintenance, admins and roles, audit log | ✅ |
+| AdminNav | — | Shared sidebar component | ✅ |
+
+Roles: Owner (everything), Editor (dramas, episodes, Home), Support (users, payments, coin adjustments), Moderator (comments). Every admin write goes to the audit log.
 
 ## Notes for build
 

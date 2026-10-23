@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button,input,select{font-family:inherit}
+label{font-size:13px;font-weight:600;color:#B0A8B4}
+.f{height:42px;border-radius:10px;border:1.5px solid #3A3340;background:#0F0C11;color:#FFFFFF;font-size:14px;padding:0 10px;box-sizing:border-box;width:100%}
+</style>
+</helmet>
+<div style="min-height: 1000px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; display: flex; flex-wrap: wrap">
+<div style="flex: 1 1 220px; display: flex"><dc-import name="AdminNav" active="settings" hint-size="100%,1000px"></dc-import></div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; max-width: 1240px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<h1 style="margin: 0; flex: 1; font-size: 26px; font-weight: 800">Settings</h1>
+<button type="button" style="height: 42px; padding: 0 18px; border-radius: 21px; border: none; background: #E0245E; color: #FFFFFF; font-size: 14px; font-weight: 700">Save changes</button>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section aria-labelledby="av" style="flex: 1 1 380px; padding: 18px 20px; border-radius: 16px; background: #1B1720; display: flex; flex-direction: column; gap: 12px">
+<h2 id="av" style="margin: 0; font-size: 16px; font-weight: 800">App versions</h2>
+<span style="font-size: 13px; color: #8E8794">Below the minimum, the app shows a required update with no Later button.</span>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="am">Android minimum</label><input id="am" class="f" value="1.0.0"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="al">Android latest</label><input id="al" class="f" value="1.3.0"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="im">iOS minimum</label><input id="im" class="f" value="1.0.0"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="il">iOS latest</label><input id="il" class="f" value="1.3.0"></div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; padding-top: 10px; border-top: 1px solid #262029">
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 600">Maintenance mode</span><span style="font-size: 12px; color: #8E8794">Apps and web show a "back soon" screen</span></span>
+<span role="switch" aria-checked="false" aria-label="Maintenance mode" style="width: 44px; height: 26px; border-radius: 13px; padding: 2px; box-sizing: border-box; background: #3A3340; display: flex"><span style="width: 22px; height: 22px; border-radius: 11px; background: #FFFFFF"></span></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="se">Support email</label><input id="se" class="f" value="support@example.com"></div>
+</section>
+
+<section aria-labelledby="ad" style="flex: 1 1 420px; padding: 18px 20px; border-radius: 16px; background: #1B1720; display: flex; flex-direction: column; gap: 10px">
+<h2 id="ad" style="margin: 0; font-size: 16px; font-weight: 800">Admins</h2>
+<sc-for list="{{ admins }}" as="a" hint-placeholder-count="4">
+<div style="display: flex; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid #262029">
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 14px; font-weight: 600">{{ a.name }}</span><span style="font-size: 12px; color: #8E8794">{{ a.email }}</span></span>
+<select aria-label="Role for {{ a.name }}" class="f" style="width: 140px" disabled="{{ a.locked }}"><option>{{ a.role }}</option><option>Editor</option><option>Support</option><option>Moderator</option></select>
+</div>
+</sc-for>
+<div style="display: flex; gap: 8px; padding-top: 6px"><input aria-label="Invite by email" class="f" placeholder="name@example.com" style="flex: 1"><button type="button" style="height: 42px; padding: 0 16px; border-radius: 21px; border: none; background: #262029; color: #FFFFFF; font-size: 13px; font-weight: 700">Invite</button></div>
+<p style="margin: 0; font-size: 12px; color: #8E8794; line-height: 1.5">Editor: dramas, episodes, Home. Support: users, payments, coin adjustments. Moderator: comments. Owner: everything.</p>
+</section>
+</div>
+
+<section aria-labelledby="al2" style="border-radius: 16px; background: #1B1720">
+<h2 id="al2" style="margin: 0; padding: 18px 20px 6px; font-size: 16px; font-weight: 800">Audit log</h2>
+<sc-for list="{{ log }}" as="l" hint-placeholder-count="4">
+<div style="display: flex; flex-wrap: wrap; gap: 12px; padding: 12px 20px; border-top: 1px solid #262029; font-size: 14px">
+<span style="color: #8E8794; width: 170px">{{ l.when }}</span><span style="font-weight: 600; width: 150px">{{ l.who }}</span><span style="flex: 1 1 260px; color: #D7D0DA">{{ l.what }}</span>
+</div>
+</sc-for>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      admins: [
+        { name: 'Wayne Tun Myint', email: 'owner', role: 'Owner', locked: true },
+        { name: 'Content editor', email: 'editor@example.com', role: 'Editor', locked: false },
+        { name: 'Support agent', email: 'support@example.com', role: 'Support', locked: false },
+        { name: 'Moderator', email: 'mod@example.com', role: 'Moderator', locked: false }
+      ],
+      log: [
+        { when: '23/10/2026 · 2:58 PM', who: 'Support agent', what: 'Added 100 coins to Mya Thandar · Refund for playback problem' },
+        { when: '23/10/2026 · 1:20 PM', who: 'Content editor', what: 'Published EP 36 of Divorced, Now I’m the CEO' },
+        { when: '23/10/2026 · 10:05 AM', who: 'Moderator', what: 'Hid a comment by Kyaw Kyaw · spam' },
+        { when: '22/10/2026 · 6:40 PM', who: 'Wayne Tun Myint', what: 'Changed coins per episode 50 → 60' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

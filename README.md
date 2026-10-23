@@ -11,7 +11,7 @@ A vertical short-drama app: 1–3 minute episodes, swiped full screen, in the st
 | `Go/` | Backend API | Go, PostgreSQL |
 | `Kotlin/` | Android | Kotlin, Jetpack Compose, Media3 |
 | `Swift/` | iOS | Swift, SwiftUI, AVPlayer |
-| `NextJS/` | Web | Next.js (responsive; same design as the apps) |
+| `NextJS/` | Web + admin panel | Next.js: viewer site at `/`, admin panel at `/admin` |
 
 All platforms live in this one repository.
 

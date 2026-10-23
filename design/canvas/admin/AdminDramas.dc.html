@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin dramas</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button,input,select{font-family:inherit}
+input::placeholder{color:#8E8794}
+th{font-weight:600;text-align:left}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+</style>
+</helmet>
+<div style="min-height: 1000px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; display: flex; flex-wrap: wrap">
+<div style="flex: 1 1 220px; display: flex"><dc-import name="AdminNav" active="dramas" hint-size="100%,1000px"></dc-import></div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; max-width: 1240px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<h1 style="margin: 0; flex: 1; font-size: 26px; font-weight: 800">Dramas</h1>
+<a href="AdminDramaEdit.dc.html" style="height: 42px; padding: 0 18px; border-radius: 21px; background: #E0245E; color: #FFFFFF; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; text-decoration: none">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>New drama</a>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+<label style="flex: 1 1 260px; height: 42px; border-radius: 12px; border: 1.5px solid #3A3340; background: #1B1720; display: flex; align-items: center; gap: 8px; padding: 0 12px; color: #8E8794">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+<input type="search" aria-label="Search dramas" placeholder="Search by title" style="flex: 1; min-width: 0; background: none; border: none; outline: none; color: #FFFFFF; font-size: 14px"></label>
+<div role="radiogroup" aria-label="Status" style="display: flex; gap: 4px; flex-wrap: wrap">
+<sc-for list="{{ statuses }}" as="s" hint-placeholder-count="4">
+<button type="button" role="radio" aria-checked="{{ s.sel }}" onClick="{{ s.pick }}" style="height: 36px; padding: 0 14px; border-radius: 18px; border: none; font-size: 13px; font-weight: 700; background: {{ s.bg }}; color: {{ s.fg }}">{{ s.label }}</button>
+</sc-for>
+</div>
+<select aria-label="Genre" style="height: 42px; border-radius: 12px; border: 1.5px solid #3A3340; background: #1B1720; color: #FFFFFF; font-size: 14px; padding: 0 10px"><option>All genres</option><option>Romance</option><option>Revenge</option><option>Werewolf</option></select>
+</div>
+
+<sc-if value="{{ isError }}" hint-placeholder-val="{{ false }}">
+<div role="alert" style="padding: 16px; border-radius: 14px; background: #2B1A1E; display: flex; align-items: center; gap: 12px; font-size: 14px">
+<span style="flex: 1">Couldn't load dramas. The API returned an error.</span>
+<button type="button" style="height: 36px; padding: 0 16px; border-radius: 18px; border: none; background: #E0245E; color: #FFFFFF; font-size: 13px; font-weight: 700">Retry</button>
+</div>
+</sc-if>
+
+<div style="overflow-x: auto; border-radius: 16px; background: #1B1720">
+<table style="width: 100%; min-width: 860px; border-collapse: collapse; font-size: 14px">
+<thead><tr style="color: #8E8794; font-size: 12px">
+<th style="padding: 14px 16px">Drama</th><th style="padding: 14px 8px">Episodes</th><th style="padding: 14px 8px">Free</th><th style="padding: 14px 8px">Coins / EP</th><th style="padding: 14px 8px">Status</th><th style="padding: 14px 8px">Updated</th><th style="padding: 14px 16px"><span style="position: absolute; left: -9999px">Actions</span></th>
+</tr></thead>
+<tbody>
+<sc-if value="{{ isLoading }}" hint-placeholder-val="{{ false }}">
+<sc-for list="{{ skeleton }}" as="k" hint-placeholder-count="5">
+<tr style="border-top: 1px solid #262029"><td colspan="7" style="padding: 14px 16px"><div style="height: 44px; border-radius: 8px; background: #262029; animation: pulse 1.4s ease-in-out infinite"></div></td></tr>
+</sc-for>
+</sc-if>
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+<sc-for list="{{ rows }}" as="d" hint-placeholder-count="7">
+<tr style="border-top: 1px solid #262029">
+<td style="padding: 10px 16px"><div style="display: flex; align-items: center; gap: 12px">
+<div style="flex: none; width: 36px; height: 48px; border-radius: 6px; background: {{ d.c }}"></div>
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><a href="AdminDramaEdit.dc.html" style="color: #FFFFFF; font-weight: 600; text-decoration: none">{{ d.t }}</a><span style="font-size: 12px; color: #8E8794">{{ d.g }}</span></div>
+</div></td>
+<td style="padding: 10px 8px">{{ d.eps }}<sc-if value="{{ d.warn }}"><span style="display: block; font-size: 12px; color: #FFC46B">{{ d.warn }}</span></sc-if></td>
+<td style="padding: 10px 8px; color: #B0A8B4">EP 1–{{ d.free }}</td>
+<td style="padding: 10px 8px; color: #B0A8B4">{{ d.price }}</td>
+<td style="padding: 10px 8px"><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: {{ d.sc }}"><span style="width: 8px; height: 8px; border-radius: 4px; background: {{ d.sc }}"></span>{{ d.status }}</span></td>
+<td style="padding: 10px 8px; color: #8E8794">{{ d.upd }}</td>
+<td style="padding: 10px 16px; text-align: right"><a href="AdminEpisodes.dc.html" style="font-size: 13px; font-weight: 700; text-decoration: none">Episodes</a></td>
+</tr>
+</sc-for>
+</sc-if>
+</tbody>
+</table>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 13px; color: #8E8794"><span>Showing 1–7 of 42</span><span style="display: flex; gap: 16px"><a href="AdminDramas.dc.html">Previous</a><a href="AdminDramas.dc.html">Next</a></span></div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"state":{"editor":"enum","options":["list","loading","error"],"default":"list"},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { status: 'All' }; }
+  renderVals() {
+    const st = this.props.state ?? 'list';
+    const statuses = ['All', 'Published', 'Scheduled', 'Draft'].map((label) => {
+      const on = this.state.status === label;
+      return { label, sel: on ? 'true' : 'false', bg: on ? '#FFFFFF' : '#1B1720', fg: on ? '#0F0C11' : '#B0A8B4', pick: () => this.setState({ status: label }) };
+    });
+    const color = { Published: '#7FD4A0', Scheduled: '#9CC3FF', Draft: '#B0A8B4' };
+    const data = [
+      ["The Billionaire's Contract Bride", 'Romance · CEO', '#5B2333', '80 / 80', '', 10, '60', 'Published', '22/10/2026'],
+      ['Reborn to Rule the Empire', 'Rebirth · Revenge', '#3B2A5E', '71 / 72', '1 failed', 10, '60', 'Published', '23/10/2026'],
+      ["Divorced, Now I'm the CEO", 'Revenge · Urban', '#5E3A1F', '36 / 90', 'Airing daily', 8, '50', 'Published', '23/10/2026'],
+      ['My Bodyguard Is a Hidden Heir', 'Hidden identity', '#1F3A5B', '60 / 60', '', 10, '60', 'Published', '20/10/2026'],
+      ['The Duke Who Married a Maid', 'Romance · Historical', '#3A2A4E', '66 / 66', '', 10, '60', 'Scheduled', '25/10/2026'],
+      ['My Ex-Husband Begs Again', 'Revenge', '#4E2A2A', '12 / 70', 'Uploading', 10, '60', 'Draft', '23/10/2026'],
+      ["The Alpha King's Lost Mate", 'Werewolf', '#2C4A3A', '68 / 68', '', 12, '60', 'Published', '17/10/2026']
+    ];
+    const rows = data.map(([t, g, c, eps, warn, free, price, status, upd]) => ({ t, g, c, eps, warn, free, price, status, upd, sc: color[status] }));
+    return { statuses, rows, isList: st === 'list', isLoading: st === 'loading', isError: st === 'error', skeleton: [1, 2, 3, 4, 5] };
+  }
+}
+</script>
+</body>
+</html>

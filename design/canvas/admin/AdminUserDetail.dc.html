@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin user detail</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button,input,select{font-family:inherit}
+label{font-size:13px;font-weight:600;color:#B0A8B4}
+dt{color:#8E8794}dd{margin:0;text-align:right}
+</style>
+</helmet>
+<div style="min-height: 1000px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; display: flex; flex-wrap: wrap">
+<div style="flex: 1 1 220px; display: flex"><dc-import name="AdminNav" active="users" hint-size="100%,1000px"></dc-import></div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; max-width: 1240px">
+<nav aria-label="Breadcrumb" style="font-size: 13px; color: #8E8794"><a href="AdminUsers.dc.html">Users</a> / Mya Thandar</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px">
+<span aria-hidden="true" style="width: 56px; height: 56px; border-radius: 28px; background: #7A3546; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800">M</span>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 3px">
+<h1 style="margin: 0; font-size: 24px; font-weight: 800">Mya Thandar</h1>
+<span style="font-size: 13px; color: #8E8794">ID 10293847 · <span style="color: #7FD4A0">Active</span> · <span style="color: #F2C46D">VIP until 23/11/2026</span></span>
+</div>
+<button type="button" style="height: 40px; padding: 0 16px; border-radius: 20px; border: none; background: #2B1A1E; color: #FF8FA0; font-size: 14px; font-weight: 700">Ban user</button>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<div style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<section aria-labelledby="pf" style="padding: 18px 20px; border-radius: 16px; background: #1B1720">
+<h2 id="pf" style="margin: 0 0 6px; font-size: 15px; font-weight: 800">Profile</h2>
+<dl style="margin: 0; font-size: 14px">
+<sc-for list="{{ facts }}" as="f" hint-placeholder-count="6">
+<div style="display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid #262029"><dt>{{ f.k }}</dt><dd>{{ f.v }}</dd></div>
+</sc-for>
+</dl>
+</section>
+<section aria-labelledby="tx" style="padding: 18px 20px; border-radius: 16px; background: #1B1720">
+<h2 id="tx" style="margin: 0 0 6px; font-size: 15px; font-weight: 800">Recent coin activity</h2>
+<sc-for list="{{ tx }}" as="t" hint-placeholder-count="5">
+<div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid #262029; font-size: 14px">
+<span style="flex: 1">{{ t.what }}</span><span style="color: #8E8794; font-size: 13px">{{ t.when }}</span><span style="width: 64px; text-align: right; font-weight: 700; color: {{ t.fg }}">{{ t.amt }}</span></div>
+</sc-for>
+</section>
+</div>
+
+<aside style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 16px">
+<section aria-labelledby="ad" style="padding: 18px 20px; border-radius: 16px; background: #1B1720; display: flex; flex-direction: column; gap: 12px">
+<h2 id="ad" style="margin: 0; font-size: 15px; font-weight: 800">Adjust coins</h2>
+<div style="font-size: 13px; color: #B0A8B4">Balance: 245 coins</div>
+<label for="amt">Amount (use − to remove)</label>
+<input id="amt" type="number" value="100" style="height: 44px; border-radius: 12px; border: 1.5px solid #3A3340; background: #0F0C11; color: #FFFFFF; font-size: 15px; padding: 0 12px">
+<label for="rs">Reason (required, shown in the user's Wallet)</label>
+<select id="rs" style="height: 44px; border-radius: 12px; border: 1.5px solid #3A3340; background: #0F0C11; color: #FFFFFF; font-size: 14px; padding: 0 10px"><option>Refund for playback problem</option><option>Missing purchase</option><option>Promotion</option><option>Correction</option></select>
+<button type="button" style="height: 44px; border-radius: 22px; border: none; background: #E0245E; color: #FFFFFF; font-size: 14px; font-weight: 700">Add 100 coins</button>
+<span style="font-size: 12px; color: #8E8794">Logged with your name in the audit log.</span>
+</section>
+<section aria-labelledby="sb" style="padding: 18px 20px; border-radius: 16px; background: #2A2112; color: #F2C46D; display: flex; flex-direction: column; gap: 6px">
+<h2 id="sb" style="margin: 0; font-size: 15px; font-weight: 800">VIP subscription</h2>
+<span style="font-size: 14px">Monthly · Google Play</span>
+<span style="font-size: 13px; color: #D9B571">Renews 23/11/2026 · order GPA.3312-7781-4420</span>
+<span style="font-size: 12px; color: #D9B571">Cancel or refund in Play Console.</span>
+</section>
+</aside>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      facts: [
+        { k: 'Email', v: 'mya@example.com' },
+        { k: 'Sign-in methods', v: 'Google, email code' },
+        { k: 'Joined', v: '02/10/2026' },
+        { k: 'Last active', v: '23/10/2026 · 9:12 AM' },
+        { k: 'Devices', v: 'Android, web' },
+        { k: 'Dramas unlocked', v: '6 dramas · 41 episodes' }
+      ],
+      tx: [
+        { what: 'Daily check-in', when: '23/10/2026', amt: '+15', fg: '#FFC46B' },
+        { what: "Unlocked EP 35 · Divorced, Now I'm the CEO", when: '22/10/2026', amt: '−60', fg: '#B0A8B4' },
+        { what: 'Watched a short ad', when: '22/10/2026', amt: '+20', fg: '#FFC46B' },
+        { what: 'Bought 550 coins · $4.99', when: '21/10/2026', amt: '+550', fg: '#FFC46B' },
+        { what: 'Invited a friend', when: '20/10/2026', amt: '+50', fg: '#FFC46B' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

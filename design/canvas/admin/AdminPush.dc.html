@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin notifications</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button,input,select,textarea{font-family:inherit}
+label{font-size:13px;font-weight:600;color:#B0A8B4}
+.f{border-radius:12px;border:1.5px solid #3A3340;background:#1B1720;color:#FFFFFF;font-size:15px;padding:0 12px;height:46px;box-sizing:border-box;width:100%}
+</style>
+</helmet>
+<div style="min-height: 1000px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; display: flex; flex-wrap: wrap">
+<div style="flex: 1 1 220px; display: flex"><dc-import name="AdminNav" active="notifications" hint-size="100%,1000px"></dc-import></div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; max-width: 1240px">
+<h1 style="margin: 0; font-size: 26px; font-weight: 800">Notifications</h1>
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+<form style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<fieldset style="border: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px">
+<legend style="font-size: 13px; font-weight: 600; color: #B0A8B4; margin-bottom: 8px">Send to</legend>
+<div role="radiogroup" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{ audiences }}" as="a" hint-placeholder-count="5">
+<button type="button" role="radio" aria-checked="{{ a.sel }}" onClick="{{ a.pick }}" style="height: 36px; padding: 0 14px; border-radius: 18px; border: none; font-size: 13px; font-weight: 700; background: {{ a.bg }}; color: {{ a.fg }}; cursor: pointer">{{ a.label }}</button>
+</sc-for>
+</div>
+<select aria-label="Drama" class="f"><option>Divorced, Now I'm the CEO</option><option>Reborn to Rule the Empire</option></select>
+</fieldset>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="nt">Title</label><input id="nt" class="f" value="EP 36 is out"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="nb">Message</label><textarea id="nb" rows="2" class="f" style="height: auto; padding: 12px; resize: none">She walks into the board meeting. He has no idea who she is.</textarea></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="op">Opens</label><select id="op" class="f"><option>Episode 36</option><option>Drama detail</option><option>Rewards</option><option>VIP</option></select></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="im">Large image (optional)</label><select id="im" class="f"><option>Drama poster</option><option>None</option></select></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="wh">When</label>
+<div style="display: flex; gap: 10px; flex-wrap: wrap"><select id="wh" class="f" style="flex: 1 1 160px; width: auto"><option>Schedule</option><option>Send now</option></select><input aria-label="Date and time" class="f" value="24/10/2026 · 8:00 PM" style="flex: 1 1 200px; width: auto"></div>
+<span style="font-size: 12px; color: #8E8794">Viewer's local time. Users who turned off this type are skipped.</span></div>
+<div style="display: flex; gap: 10px"><button type="button" style="height: 44px; padding: 0 20px; border-radius: 22px; border: none; background: #E0245E; color: #FFFFFF; font-size: 14px; font-weight: 700">Schedule</button><button type="button" style="height: 44px; padding: 0 20px; border-radius: 22px; border: none; background: #1B1720; color: #FFFFFF; font-size: 14px; font-weight: 700">Send test to me</button></div>
+</form>
+
+<aside aria-label="Preview" style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #B0A8B4">Preview</span>
+<div style="padding: 14px; border-radius: 18px; background: #2A2530; display: flex; gap: 12px">
+<span aria-hidden="true" style="flex: none; width: 36px; height: 36px; border-radius: 9px; background: #E0245E; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#FFFFFF"></path></svg></span>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="display: flex; justify-content: space-between; font-size: 12px; color: #B0A8B4"><span>The Ending</span><span>now</span></div>
+<div style="font-size: 14px; font-weight: 700">EP 36 is out</div>
+<div style="font-size: 13px; color: #D7D0DA; line-height: 1.4">She walks into the board meeting. He has no idea who she is.</div>
+</div>
+<div style="flex: none; width: 44px; height: 58px; border-radius: 6px; background: #5E3A1F"></div>
+</div>
+<span style="font-size: 12px; color: #8E8794">Android uses the monochrome notification icon; the poster shows as the large image.</span>
+</aside>
+</div>
+
+<section aria-labelledby="hs" style="border-radius: 16px; background: #1B1720">
+<h2 id="hs" style="margin: 0; padding: 18px 20px 6px; font-size: 16px; font-weight: 800">History</h2>
+<sc-for list="{{ history }}" as="h" hint-placeholder-count="3">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 20px; border-top: 1px solid #262029; font-size: 14px">
+<span style="flex: 1 1 220px; font-weight: 600">{{ h.title }}</span>
+<span style="color: #B0A8B4">{{ h.aud }}</span>
+<span style="color: #8E8794">{{ h.when }}</span>
+<span style="width: 90px; text-align: right; font-weight: 600; color: {{ h.sc }}">{{ h.status }}</span>
+</div>
+</sc-for>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { a: 'Followers of a drama' }; }
+  renderVals() {
+    const audiences = ['Everyone', 'Followers of a drama', 'VIP', 'Not VIP', 'One user'].map((label) => {
+      const on = this.state.a === label;
+      return { label, sel: on ? 'true' : 'false', bg: on ? '#FFFFFF' : '#1B1720', fg: on ? '#0F0C11' : '#B0A8B4', pick: () => this.setState({ a: label }) };
+    });
+    return {
+      audiences,
+      history: [
+        { title: 'Coming soon: The Duke Who Married a Maid', aud: 'Everyone', when: '25/10/2026 · 7:00 PM', status: 'Scheduled', sc: '#9CC3FF' },
+        { title: 'EP 35 is out', aud: "Followers · Divorced, Now I'm the CEO", when: '22/10/2026 · 8:00 PM', status: 'Sent', sc: '#7FD4A0' },
+        { title: 'Weekend VIP deal', aud: 'Not VIP', when: '18/10/2026 · 10:00 AM', status: 'Sent', sc: '#7FD4A0' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

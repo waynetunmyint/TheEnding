@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin edit drama</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button,input,select,textarea{font-family:inherit}
+label{font-size:13px;font-weight:600;color:#B0A8B4}
+</style>
+</helmet>
+<div style="min-height: 1100px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; display: flex; flex-wrap: wrap">
+<div style="flex: 1 1 220px; display: flex"><dc-import name="AdminNav" active="dramas" hint-size="100%,1100px"></dc-import></div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; max-width: 1240px">
+<nav aria-label="Breadcrumb" style="font-size: 13px; color: #8E8794"><a href="AdminDramas.dc.html">Dramas</a> / The Billionaire's Contract Bride</nav>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<h1 style="margin: 0; flex: 1; font-size: 26px; font-weight: 800">The Billionaire's Contract Bride</h1>
+<button type="button" style="height: 42px; padding: 0 18px; border-radius: 21px; border: none; background: #1B1720; color: #FFFFFF; font-size: 14px; font-weight: 700">Save draft</button>
+<button type="button" style="height: 42px; padding: 0 18px; border-radius: 21px; border: none; background: #E0245E; color: #FFFFFF; font-size: 14px; font-weight: 700">Save &amp; publish</button>
+</div>
+<nav aria-label="Drama sections" style="display: flex; gap: 22px; border-bottom: 1px solid #221D26">
+<a href="AdminDramaEdit.dc.html" aria-current="page" style="height: 40px; color: #FFFFFF; font-weight: 700; text-decoration: none; box-shadow: inset 0 -2px 0 #FF3D5E">Details</a>
+<a href="AdminEpisodes.dc.html" style="height: 40px; color: #8E8794; font-weight: 600; text-decoration: none">Episodes (80)</a>
+</nav>
+
+<div style="display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start">
+<form style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 8px"><label for="t">Title</label>
+<input id="t" value="The Billionaire's Contract Bride" style="height: 46px; border-radius: 12px; border: 1.5px solid #3A3340; background: #1B1720; color: #FFFFFF; font-size: 15px; padding: 0 12px"></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><label for="s">Synopsis</label>
+<textarea id="s" rows="4" style="border-radius: 12px; border: 1.5px solid #3A3340; background: #1B1720; color: #FFFFFF; font-size: 15px; padding: 12px; resize: vertical; line-height: 1.5">To pay her father's hospital bills, Lin Xia signs a one-year marriage contract with the coldest CEO in the city. No feelings, no questions. Then his ex-fiancée comes back, and the contract starts to burn.</textarea>
+<span style="font-size: 12px; color: #8E8794; text-align: right">212 / 400</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 13px; font-weight: 600; color: #B0A8B4">Genres and tags</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{ tags }}" as="g" hint-placeholder-count="3">
+<span style="height: 32px; padding: 0 6px 0 12px; border-radius: 16px; background: #2E1520; color: #FF8FA0; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px">{{ g }}<button type="button" aria-label="Remove {{ g }}" style="width: 24px; height: 24px; border: none; background: none; color: #FF8FA0; padding: 0; cursor: pointer">×</button></span>
+</sc-for>
+<button type="button" style="height: 32px; padding: 0 12px; border-radius: 16px; border: 1.5px dashed #3A3340; background: none; color: #B0A8B4; font-size: 13px">+ Add</button>
+</div></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 8px"><label for="fe">Free episodes</label>
+<input id="fe" type="number" value="10" style="height: 46px; border-radius: 12px; border: 1.5px solid #3A3340; background: #1B1720; color: #FFFFFF; font-size: 15px; padding: 0 12px"></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><label for="cp">Coins per episode</label>
+<input id="cp" type="number" value="60" style="height: 46px; border-radius: 12px; border: 1.5px solid #3A3340; background: #1B1720; color: #FFFFFF; font-size: 15px; padding: 0 12px"></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><label for="lg">Language</label>
+<select id="lg" style="height: 46px; border-radius: 12px; border: 1.5px solid #3A3340; background: #1B1720; color: #FFFFFF; font-size: 15px; padding: 0 10px"><option>English</option><option>Burmese</option><option>Chinese</option></select></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 13px; font-weight: 600; color: #B0A8B4">Subtitles</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px">
+<span style="height: 32px; padding: 0 12px; border-radius: 16px; background: #1B1720; display: flex; align-items: center">English · 80/80</span>
+<span style="height: 32px; padding: 0 12px; border-radius: 16px; background: #1B1720; display: flex; align-items: center">Burmese · 80/80</span>
+<span style="height: 32px; padding: 0 12px; border-radius: 16px; background: #1B1720; color: #FFC46B; display: flex; align-items: center">Thai · 34/80</span>
+</div></div>
+</form>
+
+<aside style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 13px; font-weight: 600; color: #B0A8B4">Poster (3:4)</span>
+<div style="display: flex; gap: 12px; align-items: flex-end">
+<div style="position: relative; width: 120px; height: 160px; border-radius: 12px; overflow: hidden; background: #5B2333"><div style="position: absolute; width: 130px; height: 130px; border-radius: 50%; right: -34px; top: -24px; background: #7A3546"></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><button type="button" style="height: 36px; padding: 0 14px; border-radius: 18px; border: none; background: #1B1720; color: #FFFFFF; font-size: 13px; font-weight: 700">Replace</button><span style="font-size: 12px; color: #8E8794">JPG or PNG, 900×1200</span></div>
+</div></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><span style="font-size: 13px; font-weight: 600; color: #B0A8B4">Home banner (16:9)</span>
+<div style="height: 150px; border-radius: 12px; border: 1.5px dashed #3A3340; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: #8E8794; font-size: 13px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"></path></svg>Drop image or <button type="button" style="background: none; border: none; color: #FF5C7A; font-size: 13px; font-weight: 700; padding: 0">browse</button></div></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><label for="pb">Status</label>
+<select id="pb" style="height: 46px; border-radius: 12px; border: 1.5px solid #3A3340; background: #1B1720; color: #FFFFFF; font-size: 15px; padding: 0 10px"><option>Published</option><option>Scheduled</option><option>Draft</option></select></div>
+<div style="display: flex; flex-direction: column; gap: 8px"><label for="rd">Release date and time</label>
+<input id="rd" value="18/10/2026 · 8:00 PM" style="height: 46px; border-radius: 12px; border: 1.5px solid #3A3340; background: #1B1720; color: #FFFFFF; font-size: 15px; padding: 0 12px"></div>
+<div style="padding-top: 12px; border-top: 1px solid #221D26; display: flex; flex-direction: column; gap: 6px">
+<button type="button" style="align-self: flex-start; height: 40px; background: none; border: none; color: #FF8FA0; font-size: 14px; font-weight: 700; padding: 0">Unpublish drama</button>
+<span style="font-size: 12px; color: #8E8794">Viewers who unlocked episodes keep access.</span>
+</div>
+</aside>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { tags: ['Romance', 'CEO', 'Contract marriage'] };
+  }
+}
+</script>
+</body>
+</html>

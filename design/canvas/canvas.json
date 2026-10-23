@@ -63,7 +63,25 @@
     "DeleteAccount.dc.html": {"x": 4700, "y": 4920, "w": 390, "h": 844, "title": "Delete account"},
 
     "BottomBar.dc.html": {"x": 0, "y": 6150, "w": 390, "h": 124, "title": "Component · subscription bar + tab bar"},
-    "SubStates.dc.html": {"x": 470, "y": 6150, "w": 390, "h": 1180, "title": "Subscription bar · all states"}
+    "SubStates.dc.html": {"x": 470, "y": 6150, "w": 390, "h": 1180, "title": "Subscription bar · all states"},
+
+    "admin/AdminLogin.dc.html": {"x": 0, "y": 7700, "w": 1440, "h": 900, "title": "/admin/login", "expand": "fill"},
+    "admin/AdminDashboard.dc.html": {"x": 1520, "y": 7700, "w": 1440, "h": 1000, "title": "/admin · dashboard", "expand": "fill"},
+    "admin/AdminDramas.dc.html": {"x": 3040, "y": 7700, "w": 1440, "h": 1000, "title": "/admin/dramas", "expand": "fill"},
+    "admin/AdminDramaEdit.dc.html": {"x": 4560, "y": 7700, "w": 1440, "h": 1100, "title": "/admin/dramas/[id] · details", "expand": "fill"},
+    "admin/AdminEpisodes.dc.html": {"x": 6080, "y": 7700, "w": 1440, "h": 1100, "title": "/admin/dramas/[id]/episodes · upload", "expand": "fill"},
+    "admin/AdminHome.dc.html": {"x": 7600, "y": 7700, "w": 1440, "h": 1000, "title": "/admin/home · curation", "expand": "fill"},
+    "admin/AdminUsers.dc.html": {"x": 9120, "y": 7700, "w": 1440, "h": 1000, "title": "/admin/users", "expand": "fill"},
+    "admin/AdminUserDetail.dc.html": {"x": 10640, "y": 7700, "w": 1440, "h": 1000, "title": "/admin/users/[id]", "expand": "fill"},
+
+    "admin/AdminPayments.dc.html": {"x": 0, "y": 9180, "w": 1440, "h": 1000, "title": "/admin/payments", "expand": "fill"},
+    "admin/AdminComments.dc.html": {"x": 1520, "y": 9180, "w": 1440, "h": 1000, "title": "/admin/comments · moderation", "expand": "fill"},
+    "admin/AdminRewards.dc.html": {"x": 3040, "y": 9180, "w": 1440, "h": 1100, "title": "/admin/monetization · coins, VIP, rewards", "expand": "fill"},
+    "admin/AdminPush.dc.html": {"x": 4560, "y": 9180, "w": 1440, "h": 1000, "title": "/admin/notifications", "expand": "fill"},
+    "admin/AdminSettings.dc.html": {"x": 6080, "y": 9180, "w": 1440, "h": 1000, "title": "/admin/settings · app + admins", "expand": "fill"},
+    "admin/AdminDramasEmpty.dc.html": {"x": 7600, "y": 9180, "w": 1440, "h": 900, "title": "/admin/dramas · empty", "expand": "fill"},
+    "admin/AdminForbidden.dc.html": {"x": 9120, "y": 9180, "w": 1440, "h": 900, "title": "/admin · not an admin (403)", "expand": "fill"},
+    "admin/AdminNav.dc.html": {"x": 10640, "y": 9180, "w": 240, "h": 1000, "title": "Component · admin sidebar"}
   },
   "order": [
     "Main.dc.html", "Onboarding.dc.html", "Login.dc.html", "LoginEmail.dc.html", "LoginOtp.dc.html", "LoginOtpError.dc.html", "LoginEmbedded.dc.html", "NotifyOptIn.dc.html", "UpdateDialog.dc.html",
@@ -71,7 +89,9 @@
     "Shorts.dc.html", "Detail.dc.html", "Player.dc.html", "PlayerPaused.dc.html", "Episodes.dc.html", "Unlock.dc.html", "TopUpSheet.dc.html", "AdReward.dc.html", "Comments.dc.html", "Share.dc.html", "PlayerError.dc.html", "SeriesEnd.dc.html",
     "MyList.dc.html", "History.dc.html", "MyListEmpty.dc.html", "Rewards.dc.html", "CheckIn.dc.html", "Store.dc.html", "Vip.dc.html", "PaySuccess.dc.html", "PayPending.dc.html", "PayFailed.dc.html", "Wallet.dc.html",
     "Me.dc.html", "MeGuest.dc.html", "EditProfile.dc.html", "Inbox.dc.html", "Settings.dc.html", "Language.dc.html", "NotifySettings.dc.html", "Help.dc.html", "About.dc.html", "Logout.dc.html", "DeleteAccount.dc.html",
-    "BottomBar.dc.html", "SubStates.dc.html"
+    "BottomBar.dc.html", "SubStates.dc.html",
+    "admin/AdminLogin.dc.html", "admin/AdminDashboard.dc.html", "admin/AdminDramas.dc.html", "admin/AdminDramaEdit.dc.html", "admin/AdminEpisodes.dc.html", "admin/AdminHome.dc.html", "admin/AdminUsers.dc.html", "admin/AdminUserDetail.dc.html",
+    "admin/AdminPayments.dc.html", "admin/AdminComments.dc.html", "admin/AdminRewards.dc.html", "admin/AdminPush.dc.html", "admin/AdminSettings.dc.html", "admin/AdminDramasEmpty.dc.html", "admin/AdminForbidden.dc.html", "admin/AdminNav.dc.html"
   ],
   "notes": {
     "rowA": {"x": 0, "y": -260, "text": "1 · Launch & sign-in", "kind": "title1", "maxW": 4150},
@@ -79,7 +99,9 @@
     "rowC": {"x": 0, "y": 2200, "text": "3 · Watch: feed, detail, player, unlock", "kind": "title1", "maxW": 5560},
     "rowD": {"x": 0, "y": 3430, "text": "4 · My List, rewards, coins & VIP", "kind": "title1", "maxW": 5090},
     "rowE": {"x": 0, "y": 4660, "text": "5 · Me & settings", "kind": "title1", "maxW": 5090},
-    "rowF": {"x": 0, "y": 5890, "text": "6 · Shared components", "kind": "title1", "maxW": 2000}
+    "rowF": {"x": 0, "y": 5890, "text": "6 · Shared components", "kind": "title1", "maxW": 2000},
+    "rowG": {"x": 0, "y": 7440, "text": "7 · Admin panel (Next.js /admin): content & users", "kind": "title1", "maxW": 12080},
+    "rowH": {"x": 0, "y": 8920, "text": "8 · Admin panel: money, moderation, settings & states", "kind": "title1", "maxW": 10880}
   },
   "designSystems": []
 }

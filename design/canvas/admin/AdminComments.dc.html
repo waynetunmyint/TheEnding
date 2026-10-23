@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin comments</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="min-height: 1000px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; display: flex; flex-wrap: wrap">
+<div style="flex: 1 1 220px; display: flex"><dc-import name="AdminNav" active="comments" hint-size="100%,1000px"></dc-import></div>
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; max-width: 1000px">
+<h1 style="margin: 0; font-size: 26px; font-weight: 800">Comments</h1>
+<nav aria-label="Comment queues" style="display: flex; gap: 22px; border-bottom: 1px solid #221D26">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+<button type="button" onClick="{{ t.pick }}" aria-pressed="{{ t.sel }}" style="height: 40px; background: none; border: none; padding: 0; font-size: 14px; font-weight: 700; color: {{ t.fg }}; box-shadow: inset 0 -2px 0 {{ t.line }}">{{ t.label }}</button>
+</sc-for>
+</nav>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{ items }}" as="c" hint-placeholder-count="5">
+<li style="padding: 16px 18px; border-radius: 16px; background: #1B1720; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px">
+<span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 14px; background: {{ c.av }}; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800">{{ c.i }}</span>
+<a href="AdminUserDetail.dc.html" style="color: #FFFFFF; font-weight: 700; text-decoration: none">{{ c.name }}</a>
+<span style="color: #8E8794">on {{ c.where }} · {{ c.when }}</span>
+<span style="margin-left: auto; color: #FF8FA0; font-weight: 700">{{ c.reports }}</span>
+</div>
+<p style="margin: 0; font-size: 15px; line-height: 1.5">{{ c.text }}</p>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<button type="button" style="height: 34px; padding: 0 14px; border-radius: 17px; border: none; background: #262029; color: #FFFFFF; font-size: 13px; font-weight: 700">Keep</button>
+<button type="button" style="height: 34px; padding: 0 14px; border-radius: 17px; border: none; background: #E0245E; color: #FFFFFF; font-size: 13px; font-weight: 700">Hide comment</button>
+<button type="button" style="height: 34px; padding: 0 14px; border-radius: 17px; border: none; background: #2B1A1E; color: #FF8FA0; font-size: 13px; font-weight: 700">Hide &amp; mute user 7 days</button>
+</div>
+</li>
+</sc-for>
+</ul>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { tab: 'Reported (5)' }; }
+  renderVals() {
+    const tabs = ['Reported (5)', 'All comments', 'Hidden'].map((label) => {
+      const on = this.state.tab === label;
+      return { label, sel: on ? 'true' : 'false', fg: on ? '#FFFFFF' : '#8E8794', line: on ? '#FF3D5E' : 'transparent', pick: () => this.setState({ tab: label }) };
+    });
+    return {
+      tabs,
+      items: [
+        { i: 'K', av: '#683058', name: 'Kyaw Kyaw', where: 'Reborn to Rule · EP 12', when: '23/10/2026 · 10:02 AM', reports: '4 reports · spam', text: 'Free coins here!!! visit my page for unlimited VIP' },
+        { i: 'R', av: '#38486F', name: 'Ray', where: "Divorced, Now I'm the CEO · EP 33", when: '22/10/2026 · 11:51 PM', reports: '3 reports · spoiler', text: 'Lol she becomes the CEO in EP 60 and he loses everything' },
+        { i: 'P', av: '#80532F', name: 'Phyo', where: 'The Billionaire’s Contract Bride · EP 4', when: '22/10/2026 · 8:14 PM', reports: '2 reports · harassment', text: '[Comment text held for review]' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
