@@ -4,7 +4,9 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
 import { CrownIcon, Icon } from '@/components/ui'
-import { resetDemo, update, useDemo } from '@/lib/demo-store'
+import { useConfig } from '@/lib/data'
+import { fmtDate } from '@/lib/format'
+import { claimTask, rememberReferral, updateMe, useMe } from '@/lib/store'
 
 const TABS = [
   { href: '/', label: 'Home', icon: 'home', match: ['/', '/rankings/', '/new/', '/genres/'] },
@@ -19,52 +21,61 @@ export function useHydrated() {
   return useSyncExternalStore(noop, () => true, () => false)
 }
 
+/** The id segment of a dynamic route such as /drama/<id>/ (exported once as "_"). */
+export function useRouteId(index: number): string {
+  const path = usePathname() || ''
+  return decodeURIComponent(path.split('/').filter(Boolean)[index] ?? '')
+}
+
 function useActiveTab() {
   const path = usePathname() || '/'
   const p = path.endsWith('/') ? path : `${path}/`
   return TABS.find((t) => t.match.includes(p))?.href
 }
 
+/** Subscription status bar pinned on top of the tab bar. Hidden until the backend state is known. */
 export function SubBar() {
-  const s = useDemo()
-  const hydrated = useHydrated()
-  // Hidden until the subscription state is known, never guessed.
-  if (!hydrated) return null
-  const vip = s.vip
-  const style = { background: '#2A2112', color: '#F2C46D' }
+  const { me, status } = useMe()
+  if (status !== 'ready' || !me) return null
+  const sub = me.subscription
+  const gold = { background: '#2A2112', color: '#F2C46D' }
+  const view = {
+    none: { style: gold, label: 'VIP', detail: 'Unlock every episode, no ads', action: 'Join' },
+    active: { style: gold, label: 'VIP active', detail: `${sub.plan} · until ${fmtDate(sub.until)}`, action: 'Manage' },
+    pending: { style: { background: '#1E2533', color: '#9CC3FF' }, label: 'Payment pending', detail: `VIP ${sub.plan} is being confirmed`, action: 'View' },
+    expired: { style: { background: '#2B1A1E', color: '#FF8FA0' }, label: 'VIP expired', detail: `Ended ${fmtDate(sub.until)} · renew to keep watching`, action: 'Renew' },
+    failed: { style: { background: '#2B1A1E', color: '#FF8FA0' }, label: "Payment didn't go through", detail: `VIP ${sub.plan} · you weren't charged`, action: 'Retry' },
+  }[sub.state]
   return (
-    <Link href="/vip/" className="subbar" style={style}>
-      <CrownIcon size={16} />
-      <strong>{vip ? 'VIP active' : 'VIP'}</strong>
-      <span className="detail">{vip ? `${vip.plan} · renews ${vip.renews}` : 'Unlock every episode, no ads'}</span>
-      <strong>{vip ? 'Manage' : 'Join'}</strong>
+    <Link href={sub.state === 'pending' ? '/wallet/' : '/vip/'} className="subbar" style={view.style}>
+      <CrownIcon size={16} color={view.style.color} />
+      <strong>{view.label}</strong>
+      <span className="detail">{view.detail}</span>
+      <strong>{view.action}</strong>
       <Icon name="chevron" size={14} width={2.4} />
     </Link>
   )
 }
 
 function DemoNote() {
-  const router = useRouter()
-  return (
-    <div className="demo-note">
-      Demo · sample data, saved only in this browser
-      <button type="button" onClick={() => { resetDemo(); router.push('/') }}>Reset</button>
-    </div>
-  )
+  return <div className="demo-note">Demo build · sign-in, payments and ads are simulated</div>
 }
 
 function NotifyOptIn() {
-  const s = useDemo()
-  const hydrated = useHydrated()
-  if (!hydrated || !s.signedIn || s.notifyPrompted) return null
-  const done = () => update((x) => ({ ...x, notifyPrompted: true }))
+  const { me } = useMe()
+  if (!me?.user.signedIn || me.notifyPrompted) return null
+  const done = () => updateMe({ notifyPrompted: true }).catch(() => {})
   const allow = async () => {
     try {
-      if ('Notification' in window && Notification.permission === 'default') await Notification.requestPermission()
+      if ('Notification' in window && Notification.permission === 'default') {
+        if ((await Notification.requestPermission()) === 'granted' && me.tasks.some((t) => t.key === 'notify' && t.claimable)) {
+          await claimTask('notify').catch(() => {})
+        }
+      }
     } catch {
-      // Unsupported browser: the in-app setting still records the choice.
+      // Unsupported browser: the in-app inbox still works.
     }
-    done()
+    await done()
   }
   return (
     <div className="backdrop center">
@@ -79,8 +90,23 @@ function NotifyOptIn() {
   )
 }
 
+function Maintenance() {
+  return (
+    <main className="empty" style={{ minHeight: '100dvh', justifyContent: 'center' }}>
+      <img src="/logo.png" alt="" width={56} height={78} style={{ objectFit: 'contain' }} />
+      <h1 style={{ margin: '8px 0 0', fontSize: 24, fontWeight: 800 }}>Back soon</h1>
+      <p>The Ending is getting an update. Your coins, list and progress are safe.</p>
+      <button type="button" className="btn btn-primary" style={{ marginTop: 8 }} onClick={() => window.location.reload()}>Try again</button>
+    </main>
+  )
+}
+
 export function AppShell({ children, tabs = true, flush = false }: { children: ReactNode; tabs?: boolean; flush?: boolean }) {
   const active = useActiveTab()
+  const config = useConfig()
+  const { me } = useMe()
+  useEffect(() => { rememberReferral() }, [])
+  if (config.data?.maintenance && !me?.user.role) return <Maintenance />
   return (
     <div className={`app${tabs ? '' : ' no-tabs'}${flush ? ' flush' : ''}`}>
       <aside className="sidebar" aria-label="Main">
@@ -157,17 +183,34 @@ export function useToast(): [ReactNode, (msg: string) => void] {
   const show = useCallback((m: string) => {
     setMsg(m)
     clearTimeout(timer.current)
-    timer.current = setTimeout(() => setMsg(''), 2200)
+    timer.current = setTimeout(() => setMsg(''), 2600)
   }, [])
   useEffect(() => () => clearTimeout(timer.current), [])
   return [msg ? <div className="toast" role="status">{msg}</div> : null, show]
 }
 
+/** Loading spinner, or an offline/server error with retry. */
+export function LoadState({ error, onRetry, compact }: { error?: { status: number; message: string } | string; onRetry?: () => void; compact?: boolean }) {
+  if (!error) {
+    return <div className="empty" role="status" aria-label="Loading" style={compact ? { padding: 32 } : undefined}><div className="spinner" /></div>
+  }
+  const message = typeof error === 'string' ? error : error.message
+  const offline = typeof error !== 'string' && error.status === 0
+  return (
+    <div className="empty" role="alert" style={compact ? { padding: 32 } : undefined}>
+      <div className="icon-circle" style={{ background: 'var(--surface)', color: 'var(--text-2)' }}><Icon name={offline ? 'wifiOff' : 'alert'} size={30} /></div>
+      <h2>{offline ? "You're offline" : 'Something went wrong'}</h2>
+      <p>{message}</p>
+      {onRetry && <button type="button" className="btn btn-primary" style={{ marginTop: 8 }} onClick={onRetry}>Try again</button>}
+    </div>
+  )
+}
+
 export function RequireSignIn({ children }: { children: ReactNode }) {
-  const s = useDemo()
-  const hydrated = useHydrated()
-  if (!hydrated) return null
-  if (!s.signedIn) {
+  const { me, status, error } = useMe()
+  if (status === 'error') return <LoadState error={error} onRetry={() => window.location.reload()} />
+  if (!me) return <LoadState />
+  if (!me.user.signedIn) {
     return (
       <div className="empty">
         <div className="icon-circle"><Icon name="user" size={30} /></div>

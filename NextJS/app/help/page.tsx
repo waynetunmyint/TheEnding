@@ -3,13 +3,31 @@
 import { useState } from 'react'
 import { AppShell, TopBar } from '@/components/shell'
 import { Icon } from '@/components/ui'
-import { FAQS } from '@/data/dummy'
+import { api, errorMessage } from '@/lib/api'
+import { FAQS, HELP_TOPICS } from '@/lib/constants'
+import { useConfig } from '@/lib/data'
 
 export default function HelpPage() {
+  const config = useConfig()
   const [open, setOpen] = useState(0)
-  const [topic, setTopic] = useState('Payment or coins')
+  const [topic, setTopic] = useState<string>(HELP_TOPICS[0])
   const [msg, setMsg] = useState('')
   const [sent, setSent] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const send = async () => {
+    if (!msg.trim() || busy) return
+    setBusy(true)
+    setError('')
+    try {
+      await api('/help', { method: 'POST', body: { topic, message: msg.trim() } })
+      setSent(true)
+    } catch (e) {
+      setError(errorMessage(e))
+    } finally {
+      setBusy(false)
+    }
+  }
   return (
     <AppShell tabs={false}>
       <TopBar title="Help & feedback" back="/me/" />
@@ -30,23 +48,24 @@ export default function HelpPage() {
           <h2 id="ct" className="list-group-title" style={{ marginTop: 0 }}>Still stuck? Write to us</h2>
           {sent ? (
             <div role="status" className="stack gap-8" style={{ padding: 16, borderRadius: 16, background: 'var(--surface)' }}>
-              <strong>Message ready</strong>
-              <span className="small muted">Demo: nothing was sent. In the real app we reply by email within 2 working days.</span>
+              <strong>Message sent</strong>
+              <span className="small muted">Our support team sees it in the admin panel{config.data?.supportEmail ? ` and replies from ${config.data.supportEmail}` : ''}.</span>
               <button type="button" className="btn btn-sm btn-secondary" style={{ alignSelf: 'flex-start' }} onClick={() => { setSent(false); setMsg('') }}>Write another</button>
             </div>
           ) : (
-            <form className="stack gap-12" onSubmit={(e) => { e.preventDefault(); if (msg.trim()) setSent(true) }}>
+            <form className="stack gap-12" onSubmit={(e) => { e.preventDefault(); void send() }}>
               <div className="field">
                 <label htmlFor="tp">Topic</label>
                 <select id="tp" className="input" value={topic} onChange={(e) => setTopic(e.target.value)}>
-                  <option>Payment or coins</option><option>Playback problem</option><option>Account and sign-in</option><option>Something else</option>
+                  {HELP_TOPICS.map((t) => <option key={t}>{t}</option>)}
                 </select>
               </div>
               <div className="field">
                 <label htmlFor="ms">Message</label>
-                <textarea id="ms" className="input" rows={4} placeholder="Tell us what happened. Include the drama and episode if it's about playback." value={msg} onChange={(e) => setMsg(e.target.value)} />
+                <textarea id="ms" className="input" rows={4} maxLength={2000} placeholder="Tell us what happened. Include the drama and episode if it's about playback." value={msg} onChange={(e) => setMsg(e.target.value)} />
               </div>
-              <button type="submit" className="btn btn-primary btn-block" disabled={!msg.trim()}>Send</button>
+              {error && <p role="alert" className="small" style={{ margin: 0, color: 'var(--bad)' }}>{error}</p>}
+              <button type="submit" className="btn btn-primary btn-block" disabled={!msg.trim() || busy}>Send</button>
             </form>
           )}
         </section>

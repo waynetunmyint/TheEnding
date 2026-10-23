@@ -1,21 +1,11 @@
-import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import { DramaDetail } from '@/screens/DramaDetail'
-import { DRAMAS, getDrama } from '@/data/dummy'
 
-export const dynamicParams = false
-
+// Exported once as /drama/_/; the Go server serves that shell for every drama id, and the
+// screen reads the id from the URL. Dramas added in the admin panel need no rebuild.
 export function generateStaticParams() {
-  return DRAMAS.map((d) => ({ id: d.id }))
+  return [{ id: '_' }]
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const d = getDrama((await params).id)
-  return d ? { title: d.title, description: d.synopsis } : {}
-}
-
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  if (!getDrama(id)) notFound()
-  return <DramaDetail id={id} />
+export default function Page() {
+  return <DramaDetail />
 }

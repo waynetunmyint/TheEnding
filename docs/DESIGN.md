@@ -126,4 +126,8 @@ Roles: Owner (everything), Editor (dramas, episodes, Home), Support (users, paym
 - Some artboards switch state from their Tweaks panel: OTP (entering / error), Update (optional / required), Offline (offline / server error), Ad reward (unlocked / ad failed), Player error (error / buffering), Payment (success / pending / failed), Inbox (empty), Notification settings (phone permission blocked), Unlock (coin balance), Login and Edit profile (iOS shows Apple).
 - Tab screens import `BottomBar`; its `sub` prop is the backend subscription state. Loading and offline screens hide the subscription bar.
 - Prices ($0.99–$99.99 coin packs; $4.99 / $14.99 / $99.99 VIP), episode cost (60 coins), check-in amounts and drama titles are sample values. Set the real ones before launch.
-- Posters and video frames are colour placeholders until real artwork exists.
+- Posters and video frames are colour placeholders until real artwork exists. Posters, banners and episode videos uploaded in the admin panel replace them.
+
+## Build status
+
+The web app and admin panel are built on the Go + SQLite API for every route above (see the root README). Simulated in this build: email codes, Google sign-in, store checkout, rewarded ads and push delivery (notifications go to the in-app inbox). Not built yet: the Android and iOS apps, which own the Update dialog, Apple sign-in and the native push and store flows.

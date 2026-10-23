@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: { default: 'The Ending · Short dramas', template: '%s · The Ending' },
-  description: 'Big stories, one minute at a time. Vertical short dramas: romance, revenge, rebirth and more. Demo build with sample data.',
+  description: 'Big stories, one minute at a time. Vertical short dramas: romance, revenge, rebirth and more. A full-stack demo with sample data.',
   icons: { icon: '/icon.png', apple: '/apple-touch-icon.png' },
   robots: { index: false, follow: false },
 }

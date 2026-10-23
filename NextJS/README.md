@@ -1,32 +1,30 @@
 # The Ending · Web (Next.js)
 
-**Mockup with dummy data**, live at https://the-ending.connexbiz.com/
-
 One Next.js app serves both:
 
-- **The viewer web app** at `/`: the same screens as the mobile apps, laid out responsively (bottom tabs on phones, sidebar on desktop).
-- **The admin panel** at `/admin`: dramas, episode upload, Home curation, users, payments, comments, coins/VIP/rewards, push notifications and settings.
+- **The viewer web app** at `/`: the same screens as the mobile designs, laid out responsively (bottom tabs on phones, sidebar on desktop).
+- **The admin panel** at `/admin`: dashboard, dramas and episode upload, Home curation, users, payments, comments, coins/VIP/rewards, notifications and settings.
 
-## Mockup status
-
-- All data comes from [src/data/dummy.ts](src/data/dummy.ts). Nothing talks to a server yet.
-- Viewer state (sign-in, coins, saved list, unlocked episodes, VIP, check-ins) lives in this browser's `localStorage` ([src/lib/demo-store.ts](src/lib/demo-store.ts)). The "Reset" link in the demo bar clears it.
-- Sign-in, payments, ads and uploads are simulated. No email is sent, nothing is charged, uploaded files never leave the browser.
-- The email code is `123456`. The admin panel opens from `/admin/login/` with either demo button.
-- Video playback is simulated with timed placeholders until real HLS streams exist.
-
-When the Go backend is ready, replace the dummy module and demo store with API calls. The real admin panel must be authorised by GoBackend admin roles on every request; the Next.js `/admin` guard only improves the experience.
+All data comes from the Go API ([../Go](../Go)). The app is a static export; the Go server serves it, so production is one process.
 
 ## Develop
 
+Start the API first, then the dev server:
+
 ```bash
+cd ../Go && go run .          # API on http://127.0.0.1:8080
 npm ci
-npm run dev        # http://127.0.0.1:3000
-npm run typecheck && npm run lint && npm run build   # static export to out/
+npm run dev                   # http://127.0.0.1:3000, /api proxied to the Go server
 ```
 
-## Deploy
+Set `API_URL` if the API runs elsewhere. Before committing: `npm run typecheck && npm run lint && npm run build`.
 
-`scripts/deploy.sh` (from a clean, committed tree) uploads the source to the production server, builds it there as `wayne`, swaps `public_html/dist` to the new release, checks the key routes and rolls back if any check fails. The previous release is removed one hour after a successful deploy.
+## How it's built
+
+- [src/lib/api.ts](src/lib/api.ts): fetch wrapper and upload with progress. The session is an HttpOnly cookie set by the API.
+- [src/lib/data.ts](src/lib/data.ts): small shared cache for GET requests (`useApi`, `useCatalog`, `useConfig`).
+- [src/lib/store.ts](src/lib/store.ts): the viewer's own state (`useMe`) and every action that changes it. A guest account is created on the first visit.
+- Dynamic routes (`/drama/[id]`, `/watch/[id]`, `/admin/dramas/[id]`, `/admin/dramas/[id]/episodes`, `/admin/users/[id]`) are exported once with the id `_`. The Go server serves that page for any id, and the screen reads the id from the URL, so dramas added in the admin panel need no rebuild.
+- Dates show as `dd/MM/yyyy` and times on a 12-hour clock ([src/lib/format.ts](src/lib/format.ts)).
 
 Designs and the full route list: [docs/DESIGN.md](../docs/DESIGN.md).

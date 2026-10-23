@@ -4,32 +4,46 @@ A vertical short-drama app: 1–3 minute episodes, swiped full screen, in the st
 
 ![The Ending](design/logo/the-ending-icon.png)
 
-## Platforms
+This repository is a complete, working web version you can run on your own computer: a Go API with a SQLite database, and a Next.js viewer app and admin panel on top of it. Sign-in, payments and ads are simulated, so it runs with no accounts, keys or cloud services.
 
-| Folder | Platform | Stack |
-| --- | --- | --- |
-| `Go/` | Backend API | Go, PostgreSQL |
-| `Kotlin/` | Android | Kotlin, Jetpack Compose, Media3 |
-| `Swift/` | iOS | Swift, SwiftUI, AVPlayer |
-| `NextJS/` | Web + admin panel | Next.js: viewer site at `/`, admin panel at `/admin` |
+## Run it
 
-All platforms live in this one repository.
+You need [Go 1.26+](https://go.dev/dl/) and [Node.js 22+](https://nodejs.org/).
 
-## Status
+```bash
+./start.sh
+```
 
-- **Web mockup (dummy data): https://the-ending.connexbiz.com/** — viewer app at `/`, admin panel at `/admin` ([NextJS/](NextJS/)).
-- Go backend, Android and iOS apps: not started.
+Then open http://127.0.0.1:8080. The first run builds the web app and creates `Go/data/the-ending.db` with sample dramas, viewers, payments and comments. Run `REBUILD=1 ./start.sh` after changing the web app.
 
-- Screen design: complete in Claude Design (54 artboards). See [docs/DESIGN.md](docs/DESIGN.md) for the full screen inventory and progress.
-- Design source: [design/canvas/](design/canvas/) (Claude Design `.dc.html` artboards).
-- Logo: [design/logo/](design/logo/).
+- **Viewer:** you start as a guest with 100 welcome coins. Sign in with any email and the code `123456`; your coins, list and progress move to that account.
+- **Admin panel:** open Me › Admin panel (or `/admin/login/`) and choose **Continue as the demo owner**. To try the other roles, sign in by email as `editor@example.com`, `support@example.com` or `mod@example.com`.
+- **Start over:** stop the server and delete `Go/data/`.
+
+## What works
+
+- **Watching:** Home (rotating banner, continue watching, trending, picks), rankings, new and coming soon, genres, search, Shorts, drama pages and the full-screen player. Episodes with an uploaded video play it; the sample episodes play a timed preview.
+- **Coins and VIP:** free episodes, unlock with coins, rewarded ads (3 a day), auto-unlock, daily check-in with streaks, tasks (watch 30 minutes, notifications, invite a friend, sign in), coin packs, VIP plans, wallet and purchase history. Locked videos are only streamed to viewers who unlocked them.
+- **Accounts:** guest accounts that upgrade on sign-in, profile, settings, notification preferences, inbox, help messages and account deletion.
+- **Community:** episode comments, reporting, and moderation with hide and mute.
+- **Admin:** a live dashboard; dramas with poster and banner upload; episode video upload with bulk free, locked and publish controls; Home curation; users with coin adjustments and bans; payments with recheck and CSV export; comment moderation; coin, VIP and reward settings; notifications sent now or on a schedule; app versions, maintenance mode, admin roles and the audit log.
+
+Simulated for the demo: email codes are not sent (the code is shown on screen), "Continue with Google" makes a new account, the checkout lets you choose the store's answer (paid, pending or declined), ads are a 5-second placeholder, and notifications go to the in-app inbox only.
+
+## Repository
+
+| Folder | What |
+| --- | --- |
+| [`Go/`](Go/) | API server: Go, SQLite. Also serves the built web app. |
+| [`NextJS/`](NextJS/) | Viewer web app at `/` and admin panel at `/admin`, as a static export. |
+| [`Kotlin/`](Kotlin/), [`Swift/`](Swift/) | Android and iOS apps: not started. |
+| [`design/`](design/), [`docs/DESIGN.md`](docs/DESIGN.md) | Claude Design artboards (54 app + 16 admin), logo, screen inventory. |
 
 ## Product model
 
 - Free first episodes, then each episode unlocks with coins, a rewarded ad, or VIP.
-- VIP subscription unlocks every episode with no ads.
+- VIP unlocks every episode with no ads.
 - Daily check-in and tasks give free coins.
-- Sign in with Google (primary), email one-time code, or Apple on iPhone and iPad.
 
 ## License
 

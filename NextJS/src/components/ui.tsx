@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
-import type { Drama } from '@/data/dummy'
+import type { Drama } from '@/lib/types'
 
 const PATHS: Record<string, ReactNode> = {
   home: <path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z" />,
@@ -73,11 +73,13 @@ export function Poster({ drama, rank, progress, showEps = true, badge = true }: 
   const colors = drama.badge ? BADGE_COLORS[drama.badge] : undefined
   return (
     <div className="poster" style={{ background: drama.color }}>
-      <div className="orb" style={{ background: drama.color2 }} />
+      {drama.poster
+        ? <img src={drama.poster} alt="" loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+        : <div className="orb" style={{ background: drama.color2 }} />}
       {badge && colors && <span className="badge" style={{ background: colors[0], color: colors[1] }}>{drama.badge}</span>}
       {rank !== undefined && <span className="rank">{rank}</span>}
-      {showEps && rank === undefined && progress === undefined && <span className="eps">{drama.episodes} EP</span>}
-      {progress !== undefined && <div className="progress"><span style={{ width: `${Math.round(progress * 100)}%` }} /></div>}
+      {showEps && rank === undefined && progress === undefined && drama.episodes > 0 && <span className="eps">{drama.episodes} EP</span>}
+      {progress !== undefined && <div className="progress"><span style={{ width: `${Math.min(100, Math.round(progress * 100))}%` }} /></div>}
     </div>
   )
 }

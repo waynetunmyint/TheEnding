@@ -1,174 +1,183 @@
 'use client'
 
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { AdminShell, StatusText } from '@/components/admin-shell'
-import { useToast } from '@/components/shell'
+import { useEffect, useRef, useState } from 'react'
+import { AdminShell, Breadcrumb, EmptyPanel, RoleNote, StatusText, useAdmin } from '@/components/admin-shell'
+import { LoadState, useRouteId, useToast } from '@/components/shell'
 import { Icon, Switch } from '@/components/ui'
-import { episodeLength, episodeTitle, formatTime, getDrama } from '@/data/dummy'
+import { api, errorMessage, upload } from '@/lib/api'
+import { invalidate, setData, useApi } from '@/lib/data'
+import { duration } from '@/lib/format'
+import { DramaTabs } from '@/screens/AdminDramaEdit'
+import type { AdminEpisode, Drama } from '@/lib/types'
 
-type QueueItem = { key: string; name: string; ep: number; progress: number; status: 'Waiting' | 'Uploading' | 'Converting' | 'Ready' | 'Failed'; reason?: string }
-type Episode = { n: number; title: string; len: number; free: boolean; published: boolean; video: 'Ready' | 'Failed' }
+type Data = { drama: Drama; episodes: AdminEpisode[] }
+type QueueItem = { key: string; file: File; name: string; ep: number; progress: number; length: number; status: 'Waiting' | 'Uploading' | 'Ready' | 'Failed'; reason?: string }
 
 function epFromName(name: string, fallback: number) {
   const m = name.match(/ep\s*0*(\d+)/i) ?? name.match(/(\d+)/)
   return m ? Number(m[1]) : fallback
 }
 
-// Reads only the video's dimensions locally; nothing is uploaded in the mockup.
-function checkVertical(file: File): Promise<boolean> {
+// Reads the video's dimensions and length in the browser before uploading.
+function probe(file: File): Promise<{ vertical: boolean; length: number }> {
   return new Promise((resolve) => {
     const url = URL.createObjectURL(file)
     const v = document.createElement('video')
     v.preload = 'metadata'
-    v.onloadedmetadata = () => { URL.revokeObjectURL(url); resolve(v.videoHeight > v.videoWidth) }
-    v.onerror = () => { URL.revokeObjectURL(url); resolve(false) }
+    v.onloadedmetadata = () => { URL.revokeObjectURL(url); resolve({ vertical: v.videoHeight > v.videoWidth, length: Math.round(v.duration || 0) }) }
+    v.onerror = () => { URL.revokeObjectURL(url); resolve({ vertical: false, length: 0 }) }
     v.src = url
   })
 }
 
-export function AdminEpisodes({ id }: { id: string }) {
-  const d = getDrama(id)!
+function TitleCell({ value, disabled, onSave }: { value: string; disabled: boolean; onSave: (v: string) => void }) {
+  const [v, setV] = useState(value)
+  return (
+    <input className="input" aria-label="Episode title" value={v} maxLength={80} disabled={disabled} onChange={(e) => setV(e.target.value)}
+      onBlur={() => { if (v.trim() && v.trim() !== value) onSave(v.trim()); else setV(value) }}
+      onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur() }}
+      style={{ minHeight: 36, background: 'transparent', borderColor: 'transparent', padding: '0 8px', fontSize: 14 }} />
+  )
+}
+
+export function AdminEpisodes() {
+  const id = useRouteId(2)
+  const path = id && id !== '_' ? `/admin/dramas/${encodeURIComponent(id)}/episodes` : null
+  const q = useApi<Data>(path)
+  const admin = useAdmin()
   const [toast, show] = useToast()
-  const initialCount = d.completed ? d.episodes : d.id === 'ex-husband' ? 12 : 36
-  const [episodes, setEpisodes] = useState<Episode[]>(() => Array.from({ length: initialCount }, (_, i) => ({
-    n: i + 1, title: episodeTitle(i + 1), len: episodeLength(i + 1), free: i + 1 <= d.freeEpisodes, published: d.status === 'Published',
-    video: d.id === 'reborn-empire' && i + 1 === 42 ? 'Failed' : 'Ready',
-  })))
   const [queue, setQueue] = useState<QueueItem[]>([])
   const [selected, setSelected] = useState<number[]>([])
   const [page, setPage] = useState(0)
+  const running = useRef(false)
+  const can = admin.can('content')
+
+  // Uploads run one at a time; each finished upload refreshes the episode table.
+  useEffect(() => {
+    if (running.current || !path) return
+    const next = queue.find((x) => x.status === 'Waiting')
+    if (!next) return
+    running.current = true
+    const patch = (p: Partial<QueueItem>) => setQueue((qs) => qs.map((x) => (x.key === next.key ? { ...x, ...p } : x)))
+    patch({ status: 'Uploading' })
+    upload<Data>(`/admin/dramas/${encodeURIComponent(id)}/episodes/${next.ep}/video`, next.file, { length: String(next.length) }, (pct) => patch({ progress: pct }))
+      .then((data) => { setData(path, data); patch({ status: 'Ready', progress: 100 }); invalidate('/dramas') })
+      .catch((e) => patch({ status: 'Failed', reason: errorMessage(e) }))
+      .finally(() => { running.current = false; setQueue((qs) => [...qs]) })
+  }, [queue, path, id])
+
+  if (!q.data) return <AdminShell><LoadState error={q.error} onRetry={q.reload} /></AdminShell>
+  const { drama: d, episodes } = q.data
   const pageSize = 15
   const pages = Math.max(1, Math.ceil(episodes.length / pageSize))
-  const shown = episodes.slice(page * pageSize, page * pageSize + pageSize)
+  const current = Math.min(page, pages - 1)
+  const shown = episodes.slice(current * pageSize, current * pageSize + pageSize)
 
-  // Simulated upload and conversion progress.
-  useEffect(() => {
-    if (!queue.some((q) => q.status === 'Uploading' || q.status === 'Converting' || q.status === 'Waiting')) return
-    const t = setInterval(() => {
-      setQueue((qs) => {
-        let started = qs.some((q) => q.status === 'Uploading')
-        return qs.map((q) => {
-          if (q.status === 'Uploading') {
-            const p = Math.min(100, q.progress + 12)
-            return p >= 100 ? { ...q, progress: 100, status: 'Converting' } : { ...q, progress: p }
-          }
-          if (q.status === 'Converting') return { ...q, status: 'Ready' }
-          if (q.status === 'Waiting' && !started) { started = true; return { ...q, status: 'Uploading' } }
-          return q
-        })
-      })
-    }, 500)
-    return () => clearInterval(t)
-  }, [queue])
-
-  // Add finished uploads to the episode table.
-  useEffect(() => {
-    const ready = queue.filter((q) => q.status === 'Ready' && !episodes.some((e) => e.n === q.ep && e.video === 'Ready'))
-    if (!ready.length) return
-    const t = setTimeout(() => {
-      setEpisodes((eps) => {
-        const next = [...eps]
-        ready.forEach((q) => {
-          const i = next.findIndex((e) => e.n === q.ep)
-          const ep: Episode = { n: q.ep, title: episodeTitle(q.ep), len: episodeLength(q.ep), free: q.ep <= d.freeEpisodes, published: false, video: 'Ready' }
-          if (i >= 0) next[i] = { ...next[i], video: 'Ready' }
-          else next.push(ep)
-        })
-        return next.sort((a, b) => a.n - b.n)
-      })
-    }, 0)
-    return () => clearTimeout(t)
-  }, [queue, episodes, d.freeEpisodes])
-
-  const addFiles = async (files: FileList | null) => {
-    if (!files?.length) return
+  const addFiles = async (files: FileList | File[] | null, forceEp?: number) => {
+    if (!files || !can) return
     const list = Array.from(files)
-    const nextNumber = episodes.length ? episodes[episodes.length - 1].n + 1 : 1
+    let nextNumber = (episodes.length ? episodes[episodes.length - 1].n : 0) + 1
     const items: QueueItem[] = []
-    for (let i = 0; i < list.length; i++) {
-      const f = list[i]
-      const vertical = f.type.startsWith('video/') && await checkVertical(f)
+    for (const f of list) {
+      const isVideo = f.type.startsWith('video/') || /\.(mp4|m4v|mov|webm)$/i.test(f.name)
+      const meta = isVideo ? await probe(f) : { vertical: false, length: 0 }
+      const ep = forceEp ?? epFromName(f.name, nextNumber++)
       items.push({
-        key: `${f.name}-${Date.now()}-${i}`, name: f.name, ep: epFromName(f.name, nextNumber + i), progress: 0,
-        status: vertical ? 'Waiting' : 'Failed', reason: f.type.startsWith('video/') ? 'not vertical 9:16' : 'not a video file',
+        key: `${f.name}-${Date.now()}-${Math.random()}`, file: f, name: f.name, ep, progress: 0, length: meta.length,
+        status: isVideo && meta.vertical && ep <= 500 ? 'Waiting' : 'Failed',
+        reason: !isVideo ? 'not a video file' : !meta.vertical ? 'not vertical 9:16' : ep > 500 ? 'episode number over 500' : undefined,
       })
     }
-    setQueue((q) => [...q, ...items])
+    setQueue((qs) => [...qs, ...items])
   }
 
-  const toggleSel = (n: number) => setSelected((s) => s.includes(n) ? s.filter((x) => x !== n) : [...s, n])
-  const bulk = (fn: (e: Episode) => Episode, msg: string) => {
-    setEpisodes((eps) => eps.map((e) => selected.includes(e.n) ? fn(e) : e))
-    show(`${msg} · ${selected.length} episodes`)
-    setSelected([])
+  const patch = async (ns: number[], body: { free?: boolean; published?: boolean; title?: string }, msg: string) => {
+    try {
+      const data = await api<Data>(`/admin/dramas/${encodeURIComponent(d.id)}/episodes`, { method: 'PATCH', body: { ns, ...body } })
+      setData(path!, data)
+      invalidate('/dramas')
+      show(msg)
+      setSelected([])
+    } catch (e) {
+      show(errorMessage(e))
+    }
   }
 
   return (
     <AdminShell>
-      <nav aria-label="Breadcrumb" className="small faint"><Link href="/admin/dramas/">Dramas</Link> / {d.title}</nav>
+      <Breadcrumb parent="Dramas" href="/admin/dramas/" current={d.title} />
       <h1>{d.title}</h1>
-      <nav aria-label="Drama sections" className="row" style={{ gap: 22, borderBottom: '1px solid var(--line)' }}>
-        <Link href={`/admin/dramas/${d.id}/`} style={{ minHeight: 40, color: 'var(--text-3)', fontWeight: 600, textDecoration: 'none' }}>Details</Link>
-        <Link href={`/admin/dramas/${d.id}/episodes/`} aria-current="page" style={{ minHeight: 40, color: '#FFFFFF', fontWeight: 700, textDecoration: 'none', boxShadow: 'inset 0 -2px 0 #FF3D5E' }}>Episodes ({episodes.length})</Link>
-      </nav>
+      <DramaTabs id={d.id} current="episodes" count={episodes.length} />
+      <RoleNote perm="content" admin={admin} />
 
-      <div className="two-col">
-        <label className="dropzone main-col" style={{ minHeight: 150, cursor: 'pointer' }}
-          onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); addFiles(e.dataTransfer.files) }}>
-          <Icon name="upload" size={28} style={{ color: 'var(--text-2)' }} />
-          <strong>Drop episode videos here</strong>
-          <span className="small faint" style={{ lineHeight: 1.5, maxWidth: 420 }}>Vertical 9:16 MP4. Name files EP01.mp4, EP02.mp4… and they are numbered for you. Mockup: files stay on your computer.</span>
-          <span className="btn btn-secondary btn-sm">Choose files</span>
-          <input type="file" accept="video/*" multiple className="sr-only" onChange={(e) => { addFiles(e.target.files); e.target.value = '' }} />
-        </label>
-        <section className="panel side-col" style={{ gap: 12 }} aria-labelledby="uq">
-          <h2 id="uq" style={{ margin: 0 }}>Upload queue</h2>
-          {queue.length === 0 && <span className="small faint">No uploads yet.</span>}
-          {queue.map((q) => (
-            <div key={q.key} className="stack gap-6">
-              <div className="row small" style={{ gap: 10 }}>
-                <span style={{ flex: 1, fontWeight: 600, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{q.name} → EP {q.ep}</span>
-                <span style={{ fontWeight: 600, color: q.status === 'Failed' ? 'var(--bad)' : q.status === 'Ready' ? 'var(--good)' : q.status === 'Converting' ? 'var(--info)' : 'var(--text-2)' }}>
-                  {q.status === 'Uploading' ? `Uploading ${q.progress}%` : q.status === 'Converting' ? 'Converting for streaming' : q.status === 'Failed' ? `Failed: ${q.reason}` : q.status}
-                </span>
-                {q.status === 'Failed' && <button type="button" className="btn btn-sm btn-ghost" onClick={() => setQueue((qs) => qs.filter((x) => x.key !== q.key))}>Remove</button>}
-              </div>
-              <div className="bar" role="progressbar" aria-label={q.name} aria-valuenow={q.progress} aria-valuemin={0} aria-valuemax={100}>
-                <span style={{ width: `${q.status === 'Failed' || q.status === 'Ready' || q.status === 'Converting' ? 100 : q.progress}%`, background: q.status === 'Failed' ? 'var(--bad)' : q.status === 'Ready' ? 'var(--good)' : q.status === 'Converting' ? 'var(--info)' : 'var(--accent)' }} />
-              </div>
+      {can && (
+        <div className="two-col">
+          <label className="dropzone main-col" style={{ minHeight: 150, cursor: 'pointer' }}
+            onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); void addFiles(e.dataTransfer.files) }}>
+            <Icon name="upload" size={28} style={{ color: 'var(--text-2)' }} />
+            <strong>Drop episode videos here</strong>
+            <span className="small faint" style={{ lineHeight: 1.5, maxWidth: 420 }}>Vertical 9:16 MP4, MOV or WebM, up to 500 MB each. Name files EP01.mp4, EP02.mp4… and they are numbered for you. New episodes start unpublished.</span>
+            <span className="btn btn-secondary btn-sm">Choose files</span>
+            <input type="file" accept="video/mp4,video/quicktime,video/webm,.mp4,.m4v,.mov,.webm" multiple className="sr-only" onChange={(e) => { void addFiles(e.target.files); e.target.value = '' }} />
+          </label>
+          <section className="panel side-col" style={{ gap: 12 }} aria-labelledby="uq">
+            <div className="row between"><h2 id="uq" style={{ margin: 0 }}>Upload queue</h2>
+              {queue.some((x) => x.status === 'Ready' || x.status === 'Failed') && <button type="button" className="btn btn-ghost btn-sm" onClick={() => setQueue((qs) => qs.filter((x) => x.status === 'Waiting' || x.status === 'Uploading'))}>Clear finished</button>}
             </div>
-          ))}
-        </section>
-      </div>
+            {queue.length === 0 && <span className="small faint">No uploads yet.</span>}
+            {queue.map((x) => (
+              <div key={x.key} className="stack gap-6">
+                <div className="row small" style={{ gap: 10 }}>
+                  <span style={{ flex: 1, fontWeight: 600, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{x.name} → EP {x.ep}</span>
+                  <span style={{ fontWeight: 600, color: x.status === 'Failed' ? 'var(--bad)' : x.status === 'Ready' ? 'var(--good)' : 'var(--text-2)' }}>
+                    {x.status === 'Uploading' ? `Uploading ${x.progress}%` : x.status === 'Failed' ? `Failed: ${x.reason}` : x.status}
+                  </span>
+                  {x.status === 'Failed' && <button type="button" className="btn btn-sm btn-ghost" onClick={() => setQueue((qs) => qs.filter((y) => y.key !== x.key))}>Remove</button>}
+                </div>
+                <div className="bar" role="progressbar" aria-label={x.name} aria-valuenow={x.progress} aria-valuemin={0} aria-valuemax={100}>
+                  <span style={{ width: `${x.status === 'Failed' || x.status === 'Ready' ? 100 : x.progress}%`, background: x.status === 'Failed' ? 'var(--bad)' : x.status === 'Ready' ? 'var(--good)' : 'var(--accent)' }} />
+                </div>
+              </div>
+            ))}
+          </section>
+        </div>
+      )}
 
-      <div className="row small" style={{ flexWrap: 'wrap', gap: 10 }}>
-        <span className="faint" style={{ flex: 1 }}>{selected.length ? `${selected.length} selected` : 'Select episodes for bulk changes'}</span>
-        <button type="button" className="btn btn-secondary btn-sm" disabled={!selected.length} onClick={() => bulk((e) => ({ ...e, free: true }), 'Set free')}>Set free</button>
-        <button type="button" className="btn btn-secondary btn-sm" disabled={!selected.length} onClick={() => bulk((e) => ({ ...e, free: false }), 'Set locked')}>Set locked</button>
-        <button type="button" className="btn btn-secondary btn-sm" disabled={!selected.length} onClick={() => bulk((e) => ({ ...e, published: true }), 'Published')}>Publish</button>
-      </div>
+      {can && (
+        <div className="row small" style={{ flexWrap: 'wrap', gap: 10 }}>
+          <span className="faint" style={{ flex: 1 }}>{selected.length ? `${selected.length} selected` : 'Select episodes for bulk changes'}</span>
+          <button type="button" className="btn btn-secondary btn-sm" disabled={!selected.length} onClick={() => patch(selected, { free: true }, `Set free · ${selected.length} episodes`)}>Set free</button>
+          <button type="button" className="btn btn-secondary btn-sm" disabled={!selected.length} onClick={() => patch(selected, { free: false }, `Set locked · ${selected.length} episodes`)}>Set locked</button>
+          <button type="button" className="btn btn-secondary btn-sm" disabled={!selected.length} onClick={() => patch(selected, { published: true }, `Published · ${selected.length} episodes`)}>Publish</button>
+          <button type="button" className="btn btn-secondary btn-sm" disabled={!selected.length} onClick={() => patch(selected, { published: false }, `Unpublished · ${selected.length} episodes`)}>Unpublish</button>
+        </div>
+      )}
 
       {episodes.length === 0 ? (
-        <div className="empty panel"><h2>No episodes yet</h2><p>Drop the episode videos above to start.</p></div>
+        <EmptyPanel title="No episodes yet" body="Drop the episode videos above to start." icon="upload" />
       ) : (
         <div className="table-box">
-          <table className="table" style={{ minWidth: 820 }}>
-            <thead><tr><th style={{ width: 28 }}><input type="checkbox" aria-label="Select all on this page" checked={shown.every((e) => selected.includes(e.n))} onChange={(e) => setSelected(e.target.checked ? Array.from(new Set([...selected, ...shown.map((x) => x.n)])) : selected.filter((n) => !shown.some((x) => x.n === n)))} /></th><th>EP</th><th>Title</th><th>Length</th><th>Video</th><th>Access</th><th>Published</th><th><span className="sr-only">Actions</span></th></tr></thead>
+          <table className="table" style={{ minWidth: 860 }}>
+            <thead><tr>
+              <th style={{ width: 28 }}><input type="checkbox" aria-label="Select all on this page" disabled={!can} checked={shown.every((e) => selected.includes(e.n))} onChange={(e) => setSelected(e.target.checked ? Array.from(new Set([...selected, ...shown.map((x) => x.n)])) : selected.filter((n) => !shown.some((x) => x.n === n)))} /></th>
+              <th>EP</th><th>Title</th><th>Length</th><th>Video</th><th>Access</th><th>Published</th><th><span className="sr-only">Actions</span></th>
+            </tr></thead>
             <tbody>
               {shown.map((e) => (
                 <tr key={e.n}>
-                  <td><input type="checkbox" aria-label={`Select EP ${e.n}`} checked={selected.includes(e.n)} onChange={() => toggleSel(e.n)} /></td>
+                  <td><input type="checkbox" aria-label={`Select EP ${e.n}`} disabled={!can} checked={selected.includes(e.n)} onChange={() => setSelected((s) => s.includes(e.n) ? s.filter((x) => x !== e.n) : [...s, e.n])} /></td>
                   <td style={{ fontWeight: 700 }}>{e.n}</td>
-                  <td>{e.title}</td>
-                  <td className="muted">{formatTime(e.len)}</td>
-                  <td><StatusText value={e.video} /></td>
+                  <td style={{ minWidth: 200 }}><TitleCell key={e.title} value={e.title} disabled={!can} onSave={(title) => patch([e.n], { title }, `Renamed EP ${e.n}`)} /></td>
+                  <td className="muted">{e.length ? duration(e.length) : '—'}</td>
+                  <td><StatusText value={e.videoStatus} /></td>
                   <td style={{ color: e.free ? 'var(--good)' : 'var(--text-2)' }}>{e.free ? 'Free' : `Locked · ${d.coinsPerEpisode} coins`}</td>
-                  <td><Switch label={`Publish EP ${e.n}`} checked={e.published} onChange={(v) => setEpisodes((eps) => eps.map((x) => x.n === e.n ? { ...x, published: v } : x))} /></td>
+                  <td><Switch label={`Publish EP ${e.n}`} checked={e.published} disabled={!can} onChange={(v) => patch([e.n], { published: v }, `${v ? 'Published' : 'Unpublished'} EP ${e.n}`)} /></td>
                   <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-                    <label style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', cursor: 'pointer' }}>{e.video === 'Failed' ? 'Upload again' : 'Replace video'}
-                      <input type="file" accept="video/*" className="sr-only" onChange={(ev) => { const f = ev.target.files; if (f?.[0]) { const renamed = new File([f[0]], `EP${e.n}.mp4`, { type: f[0].type }); const dt = new DataTransfer(); dt.items.add(renamed); addFiles(dt.files) } ev.target.value = '' }} />
-                    </label>
+                    {can && (
+                      <label style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', cursor: 'pointer' }}>{e.videoStatus === 'Ready' ? 'Replace video' : e.videoStatus === 'Failed' ? 'Upload again' : 'Upload video'}
+                        <input type="file" accept="video/mp4,video/quicktime,video/webm,.mp4,.m4v,.mov,.webm" className="sr-only" onChange={(ev) => { const f = ev.target.files?.[0]; if (f) void addFiles([f], e.n); ev.target.value = '' }} />
+                      </label>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -180,8 +189,8 @@ export function AdminEpisodes({ id }: { id: string }) {
         <div className="row between small faint">
           <span>EP {shown[0]?.n}–{shown[shown.length - 1]?.n} of {episodes.length}</span>
           <span className="row" style={{ gap: 8 }}>
-            <button type="button" className="btn btn-sm btn-secondary" disabled={page === 0} onClick={() => setPage(page - 1)}>Previous</button>
-            <button type="button" className="btn btn-sm btn-secondary" disabled={page >= pages - 1} onClick={() => setPage(page + 1)}>Next</button>
+            <button type="button" className="btn btn-sm btn-secondary" disabled={current === 0} onClick={() => setPage(current - 1)}>Previous</button>
+            <button type="button" className="btn btn-sm btn-secondary" disabled={current >= pages - 1} onClick={() => setPage(current + 1)}>Next</button>
           </span>
         </div>
       )}

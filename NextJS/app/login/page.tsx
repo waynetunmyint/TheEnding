@@ -2,9 +2,11 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useSyncExternalStore } from 'react'
+import { useState, useSyncExternalStore } from 'react'
+import { useToast } from '@/components/shell'
 import { Icon } from '@/components/ui'
-import { getDemo, update } from '@/lib/demo-store'
+import { errorMessage } from '@/lib/api'
+import { signInWithGoogle } from '@/lib/store'
 
 const noop = () => () => {}
 // In-app browsers (Facebook, Instagram, LINE, Android WebView) block Google sign-in.
@@ -26,15 +28,23 @@ function GoogleG() {
 export default function LoginPage() {
   const router = useRouter()
   const embedded = useEmbedded()
-  const google = () => {
-    update((s) => ({ ...s, signedIn: true, user: { ...s.user, via: 'Google' } }))
-    router.push(getDemo().onboarded ? '/' : '/welcome/')
+  const [busy, setBusy] = useState(false)
+  const [toast, show] = useToast()
+  const google = async () => {
+    setBusy(true)
+    try {
+      const me = await signInWithGoogle()
+      router.push(me.onboarded ? '/' : '/welcome/')
+    } catch (e) {
+      show(errorMessage(e))
+      setBusy(false)
+    }
   }
   const openInBrowser = () => {
     const url = window.location.href
     // Android: hand off to Chrome. iOS in-app browsers have no handoff API; copy the link instead.
     if (/Android/i.test(navigator.userAgent)) window.location.href = `intent://${url.replace(/^https?:\/\//, '')}#Intent;scheme=https;package=com.android.chrome;end`
-    else navigator.clipboard?.writeText(url).catch(() => {})
+    else navigator.clipboard?.writeText(url).then(() => show('Link copied. Paste it in Safari.'), () => {})
   }
 
   return (
@@ -63,14 +73,15 @@ export default function LoginPage() {
             <button type="button" className="btn btn-secondary btn-block" disabled>Google unavailable here</button>
           </>
         ) : (
-          <button type="button" className="btn btn-light btn-block" onClick={google}><GoogleG />Continue with Google</button>
+          <button type="button" className="btn btn-light btn-block" disabled={busy} onClick={google}><GoogleG />Continue with Google</button>
         )}
         <Link href="/login/email/" className="btn btn-secondary btn-block"><Icon name="mail" size={20} />Continue with email</Link>
         <p className="tiny faint" style={{ margin: '8px 0 0', textAlign: 'center', lineHeight: 1.6 }}>
-          Demo: signing in only changes this browser; no account is created.<br />
-          By continuing you agree to our <Link href="/about/">Terms</Link> and <Link href="/about/">Privacy Policy</Link>.
+          Demo sign-in: Google is simulated and makes a new account each time. Use email to come back to the same account.<br />
+          By continuing you agree to our <Link href="/about/#terms">Terms</Link> and <Link href="/about/#privacy">Privacy Policy</Link>.
         </p>
       </div>
+      {toast}
     </div>
   )
 }

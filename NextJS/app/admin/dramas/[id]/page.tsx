@@ -1,15 +1,10 @@
-import { notFound } from 'next/navigation'
 import { AdminDramaEdit } from '@/screens/AdminDramaEdit'
-import { DRAMAS, getDrama } from '@/data/dummy'
 
-export const dynamicParams = false
-
+// Exported once as /admin/dramas/_/; the Go server serves that shell for every drama id.
 export function generateStaticParams() {
-  return DRAMAS.map((d) => ({ id: d.id }))
+  return [{ id: '_' }]
 }
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  if (!getDrama(id)) notFound()
-  return <AdminDramaEdit id={id} />
+export default function Page() {
+  return <AdminDramaEdit />
 }

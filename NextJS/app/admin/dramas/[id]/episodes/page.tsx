@@ -1,15 +1,10 @@
-import { notFound } from 'next/navigation'
 import { AdminEpisodes } from '@/screens/AdminEpisodes'
-import { DRAMAS, getDrama } from '@/data/dummy'
 
-export const dynamicParams = false
-
+// Exported once as /admin/dramas/_/episodes/; see app/admin/dramas/[id]/page.tsx.
 export function generateStaticParams() {
-  return DRAMAS.map((d) => ({ id: d.id }))
+  return [{ id: '_' }]
 }
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  if (!getDrama(id)) notFound()
-  return <AdminEpisodes id={id} />
+export default function Page() {
+  return <AdminEpisodes />
 }
