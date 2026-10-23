@@ -277,6 +277,10 @@ func localHost(h string) bool {
 
 func (s *Server) withHeaders(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Android's HttpURLConnection can't send PATCH; it sends POST with this header instead.
+		if r.Method == http.MethodPost && strings.EqualFold(r.Header.Get("X-HTTP-Method-Override"), http.MethodPatch) {
+			r.Method = http.MethodPatch
+		}
 		h := w.Header()
 		h.Set("X-Content-Type-Options", "nosniff")
 		h.Set("Referrer-Policy", "strict-origin-when-cross-origin")

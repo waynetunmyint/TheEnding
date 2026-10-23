@@ -40,3 +40,6 @@ NextJS/.next/
 NextJS/out/
 NextJS/dist/
 NextJS/next-env.d.ts
+
+# TypeScript build cache
+*.tsbuildinfo
