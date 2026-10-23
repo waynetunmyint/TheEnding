@@ -77,7 +77,9 @@ export function Player({ id }: { id: string }) {
   // and auto-unlock with coins when the viewer opted in.
   useEffect(() => {
     setProgress(d.id, ep)
-    router.replace(`/watch/${d.id}/?ep=${ep}`, { scroll: false })
+    // Plain history update: a router navigation here would re-suspend the page and remount the player.
+    const url = `/watch/${d.id}/?ep=${ep}`
+    if (window.location.pathname + window.location.search !== url) window.history.replaceState(null, '', url)
     const timer = setTimeout(() => {
       setLoading(false)
       const st = getDemo()
@@ -86,7 +88,7 @@ export function Player({ id }: { id: string }) {
       }
     }, 600)
     return () => clearTimeout(timer)
-  }, [ep, d, router, show])
+  }, [ep, d, show])
 
   useEffect(() => {
     const on = () => setOffline(false)
