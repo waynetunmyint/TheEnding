@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="padding: 50px 8px 0 4px; height: 94px; box-sizing: border-box; display: flex; align-items: center">
+<a href="Me.dc.html" aria-label="Back" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<h1 style="flex: 1; margin: 0 52px 0 0; font-size: 17px; font-weight: 800; text-align: center">Settings</h1>
+</header>
+<main style="padding: 0 16px; display: flex; flex-direction: column; gap: 22px">
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+<section style="display: flex; flex-direction: column">
+<h2 style="margin: 0 0 2px; font-size: 13px; font-weight: 600; color: #8E8794">{{ g.name }}</h2>
+<sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="3">
+<div style="min-height: 50px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #1B1720; font-size: 15px">
+<span style="flex: 1">{{ r.label }}</span>
+<sc-if value="{{ r.isToggle }}">
+<button type="button" role="switch" aria-label="{{ r.label }}" aria-checked="{{ r.on }}" onClick="{{ r.toggle }}" style="width: 52px; height: 32px; border-radius: 16px; border: none; padding: 3px; background: {{ r.bg }}; display: flex; justify-content: {{ r.justify }}">
+<span style="width: 26px; height: 26px; border-radius: 13px; background: #FFFFFF"></span></button>
+</sc-if>
+<sc-if value="{{ r.isLink }}">
+<a href="{{ r.href }}" aria-label="{{ r.label }}" style="display: flex; align-items: center; gap: 6px; min-height: 44px; color: #8E8794; font-size: 14px; text-decoration: none">{{ r.value }}
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8E8794" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></a>
+</sc-if>
+<sc-if value="{{ r.isText }}"><span style="color: #8E8794; font-size: 14px">{{ r.value }}</span></sc-if>
+</div>
+</sc-for>
+</section>
+</sc-for>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { autoplay: true, autounlock: false, cellular: true }; }
+  renderVals() {
+    const tog = (key, label) => {
+      const on = this.state[key];
+      return { label, isToggle: true, isLink: false, isText: false, on: on ? 'true' : 'false', bg: on ? '#E0245E' : '#3A3340', justify: on ? 'flex-end' : 'flex-start', toggle: () => this.setState({ [key]: !on }) };
+    };
+    const link = (label, href, value) => ({ label, href, value, isToggle: false, isLink: true, isText: false });
+    const text = (label, value) => ({ label, value, isToggle: false, isLink: false, isText: true });
+    return {
+      groups: [
+        { name: 'Playback', rows: [
+          tog('autoplay', 'Autoplay next episode'),
+          tog('autounlock', 'Auto-unlock with coins'),
+          tog('cellular', 'Play on mobile data'),
+          link('Default quality', 'PlayerPaused.dc.html', 'Auto')
+        ] },
+        { name: 'App', rows: [
+          link('Language', 'Language.dc.html', 'English'),
+          link('Notifications', 'NotifySettings.dc.html', 'On'),
+          link('Clear cache', 'Settings.dc.html', '')
+        ] },
+        { name: 'Account', rows: [
+          link('Edit profile', 'EditProfile.dc.html', ''),
+          link('Sign out', 'Logout.dc.html', ''),
+          link('Delete account', 'DeleteAccount.dc.html', '')
+        ] },
+        { name: 'About', rows: [
+          link('Terms & privacy', 'About.dc.html', ''),
+          text('Version', '1.0.0 (1)')
+        ] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

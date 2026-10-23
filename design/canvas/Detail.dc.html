@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Drama detail</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<div style="position: absolute; left: 0; right: 0; top: 0; height: 330px; background: #3D1A26; overflow: hidden">
+<div style="position: absolute; width: 360px; height: 360px; border-radius: 50%; right: -120px; top: -120px; background: #5B2333"></div>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 120px; background: rgba(15, 12, 17, 0.6)"></div>
+</div>
+<header style="position: absolute; top: 50px; left: 4px; right: 4px; height: 44px; display: flex; justify-content: space-between">
+<a href="Home.dc.html" aria-label="Back" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<a href="Share.dc.html" aria-label="Share" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7h16v-7M12 3v12M7 8l5-5 5 5"></path></svg></a>
+</header>
+
+<main style="position: absolute; top: 110px; left: 0; right: 0; bottom: 96px; overflow: hidden; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; gap: 14px; padding: 0 16px">
+<div style="flex: none; position: relative; width: 120px; height: 160px; border-radius: 12px; overflow: hidden; background: #5B2333">
+<div style="position: absolute; width: 130px; height: 130px; border-radius: 50%; right: -34px; top: -24px; background: #7A3546"></div>
+</div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 8px; padding-top: 30px">
+<h1 style="margin: 0; font-size: 21px; font-weight: 800; line-height: 1.25">The Billionaire's Contract Bride</h1>
+<div style="font-size: 13px; color: #D7D0DA">80 episodes · Completed</div>
+<div style="display: flex; gap: 6px; flex-wrap: wrap; font-size: 12px">
+<span style="padding: 3px 8px; border-radius: 6px; background: rgba(255, 255, 255, 0.12)">Romance</span>
+<span style="padding: 3px 8px; border-radius: 6px; background: rgba(255, 255, 255, 0.12)">CEO</span>
+<span style="padding: 3px 8px; border-radius: 6px; background: rgba(255, 255, 255, 0.12)">Contract marriage</span>
+</div>
+</div>
+</div>
+
+<p style="margin: 0; padding: 0 16px; font-size: 14px; color: #B0A8B4; line-height: 1.55">To pay her father's hospital bills, Lin Xia signs a one-year marriage contract with the coldest CEO in the city. No feelings, no questions. Then his ex-fiancée comes back, and the contract starts to burn.</p>
+
+<div style="display: flex; align-items: center; gap: 8px; padding: 0 16px; font-size: 13px; color: #FFC46B; font-weight: 600">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="2"></rect><path d="M12 8v13M3 12h18"></path></svg>
+Episodes 1–10 are free · VIP watches all
+</div>
+
+<section aria-labelledby="ep" style="display: flex; flex-direction: column; gap: 12px; padding: 0 16px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 id="ep" style="margin: 0; font-size: 17px; font-weight: 800">Episodes</h2>
+<a href="Episodes.dc.html" style="font-size: 13px; color: #8E8794; text-decoration: none">All 80 ›</a>
+</div>
+<div style="display: flex; gap: 16px; font-size: 14px; font-weight: 600">
+<span style="color: #FFFFFF">1–30</span><span style="color: #8E8794">31–60</span><span style="color: #8E8794">61–80</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{ eps }}" as="e" hint-placeholder-count="18">
+<a href="{{ e.href }}" aria-label="{{ e.label }}" style="position: relative; height: 46px; border-radius: 10px; background: {{ e.bg }}; color: {{ e.fg }}; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; text-decoration: none">{{ e.n }}
+<sc-if value="{{ e.locked }}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#8E8794" stroke-width="2.6" stroke-linecap="round" aria-hidden="true" style="position: absolute; top: 4px; right: 4px"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></sc-if>
+</a>
+</sc-for>
+</div>
+</section>
+</main>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 16px 34px; display: flex; gap: 12px; background: #0F0C11; border-top: 1px solid #1B1720">
+<button type="button" aria-label="Save to My List" style="width: 52px; height: 52px; border-radius: 26px; border: none; background: #1B1720; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"></path></svg></button>
+<a href="Player.dc.html" style="flex: 1; height: 52px; border-radius: 26px; background: #E0245E; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none">
+<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="#FFFFFF"></path></svg>Continue EP 4</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const eps = [];
+    for (let n = 1; n <= 18; n++) {
+      const locked = n > 10, current = n === 4, watched = n < 4;
+      eps.push({
+        n, locked,
+        label: 'Episode ' + n + (locked ? ', locked' : ''),
+        href: locked ? 'Unlock.dc.html' : 'Player.dc.html',
+        bg: current ? '#2E1520' : '#1B1720',
+        fg: current ? '#FF5C7A' : (watched ? '#8E8794' : '#FFFFFF')
+      });
+    }
+    return { eps };
+  }
+}
+</script>
+</body>
+</html>

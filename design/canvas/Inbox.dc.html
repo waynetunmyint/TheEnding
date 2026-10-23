@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Notifications inbox</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="padding: 50px 8px 0 4px; height: 94px; box-sizing: border-box; display: flex; align-items: center">
+<a href="Me.dc.html" aria-label="Back" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<h1 style="flex: 1; margin: 0; font-size: 17px; font-weight: 800; text-align: center">Notifications</h1>
+<button type="button" style="width: 92px; height: 44px; background: none; border: none; color: #B0A8B4; font-size: 14px; text-align: right; padding: 0 8px 0 0">Read all</button>
+</header>
+
+<sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}">
+<ul style="list-style: none; margin: 0; padding: 0 16px">
+<sc-for list="{{ items }}" as="n" hint-placeholder-count="6">
+<li><a href="{{ n.href }}" style="display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid #1B1720; color: #FFFFFF; text-decoration: none">
+<span aria-hidden="true" style="flex: none; width: 40px; height: 40px; border-radius: 20px; background: {{ n.bg }}; color: {{ n.fg }}; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{ n.isEp }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="3"></rect><path d="m10 9 5 3-5 3z"></path></svg></sc-if>
+<sc-if value="{{ n.isCoin }}"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FFB020"></circle><circle cx="12" cy="12" r="6.5" fill="none" stroke="#B26F00" stroke-width="1.6"></circle></svg></sc-if>
+<sc-if value="{{ n.isVip }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg></sc-if>
+<sc-if value="{{ n.isSys }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"></path><path d="M10 21h4"></path></svg></sc-if>
+</span>
+<span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<span style="font-size: 15px; font-weight: {{ n.weight }}">{{ n.title }}</span>
+<span style="font-size: 14px; color: #B0A8B4; line-height: 1.4">{{ n.body }}</span>
+<span style="font-size: 12px; color: #8E8794">{{ n.when }}</span>
+</span>
+<sc-if value="{{ n.unread }}"><span aria-label="Unread" style="flex: none; width: 8px; height: 8px; border-radius: 4px; background: #FF3D5E; margin-top: 6px"></span></sc-if>
+</a></li>
+</sc-for>
+</ul>
+</sc-if>
+
+<sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="padding: 160px 44px 0; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center">
+<div style="width: 72px; height: 72px; border-radius: 36px; background: #1B1720; color: #B0A8B4; display: flex; align-items: center; justify-content: center">
+<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"></path><path d="M10 21h4"></path></svg></div>
+<h2 style="margin: 6px 0 0; font-size: 20px; font-weight: 800">All caught up</h2>
+<p style="margin: 0; font-size: 15px; color: #B0A8B4; line-height: 1.5">New episodes and rewards will show up here.</p>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"empty":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const empty = this.props.empty ?? false;
+    const t = { ep: { isEp: true, bg: '#2E1520', fg: '#FF5C7A' }, coin: { isCoin: true, bg: '#2A2112', fg: '#FFC46B' }, vip: { isVip: true, bg: '#2A2112', fg: '#F2C46D' }, sys: { isSys: true, bg: '#1B1720', fg: '#B0A8B4' } };
+    const mk = (type, unread, title, body, when, href) => Object.assign({ isEp: false, isCoin: false, isVip: false, isSys: false }, t[type], { unread, weight: unread ? 700 : 500, title, body, when, href });
+    const items = [
+      mk('ep', true, 'EP 36 is out', "Divorced, Now I'm the CEO has a new episode.", '23/10/2026 · 8:00 AM', 'Player.dc.html'),
+      mk('coin', true, 'Your daily coins are ready', 'Check in today for +15 coins.', '23/10/2026 · 7:00 AM', 'Rewards.dc.html'),
+      mk('vip', false, 'VIP renewed', 'Monthly VIP renews on 23/11/2026.', '23/10/2026 · 12:01 AM', 'Vip.dc.html'),
+      mk('ep', false, 'Coming soon: The Duke Who Married a Maid', 'Premieres 25/10/2026. You set a reminder.', '22/10/2026 · 6:00 PM', 'HomeNew.dc.html'),
+      mk('sys', false, 'New sign-in', 'Signed in on a new iPhone. Not you? Sign out of other devices.', '20/10/2026 · 9:14 PM', 'Settings.dc.html')
+    ];
+    return { items, hasItems: !empty, isEmpty: empty };
+  }
+}
+</script>
+</body>
+</html>

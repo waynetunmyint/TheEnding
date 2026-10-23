@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Not enough coins · top-up</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #000000; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<dc-import name="Player" hint-size="390px,844px"></dc-import>
+<div style="position: absolute; inset: 0; background: rgba(5, 3, 6, 0.7)"></div>
+<section role="dialog" aria-labelledby="tu" style="position: absolute; left: 0; right: 0; bottom: 0; background: #1B1720; border-radius: 20px 20px 0 0; padding: 8px 16px 36px; display: flex; flex-direction: column; gap: 14px">
+<div style="align-self: center; width: 36px; height: 4px; border-radius: 2px; background: #3A3340"></div>
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px">
+<div>
+<h2 id="tu" style="margin: 0; font-size: 18px; font-weight: 800">Not enough coins</h2>
+<p style="margin: 4px 0 0; font-size: 14px; color: #B0A8B4">EP 13 needs 60 coins. You have 25.</p>
+</div>
+<a href="Unlock.dc.html" aria-label="Close" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-end; color: #B0A8B4">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a>
+</div>
+<div role="radiogroup" aria-label="Coin packs" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{ packs }}" as="p" hint-placeholder-count="6">
+<button type="button" role="radio" aria-checked="{{ p.sel }}" onClick="{{ p.pick }}" style="position: relative; height: 96px; border-radius: 14px; border: 2px solid {{ p.ring }}; background: {{ p.bg }}; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 0">
+<sc-if value="{{ p.tag }}"><span style="position: absolute; top: -1px; right: -1px; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 0 12px 0 8px; background: #E0245E">{{ p.tag }}</span></sc-if>
+<span style="display: flex; align-items: center; gap: 5px; font-size: 18px; font-weight: 800">
+<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#FFB020"></circle><circle cx="12" cy="12" r="6.5" fill="none" stroke="#B26F00" stroke-width="1.6"></circle></svg>{{ p.coins }}</span>
+<sc-if value="{{ p.bonus }}"><span style="font-size: 12px; color: #FFC46B; font-weight: 700">+{{ p.bonus }} bonus</span></sc-if>
+<span style="font-size: 13px; color: #B0A8B4">{{ p.price }}</span>
+</button>
+</sc-for>
+</div>
+<a href="PaySuccess.dc.html" style="height: 54px; border-radius: 27px; background: #E0245E; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700">{{ cta }}</a>
+<div style="display: flex; justify-content: center; gap: 18px; font-size: 13px">
+<a href="AdReward.dc.html" style="min-height: 32px; display: flex; align-items: center">Watch an ad instead</a>
+<a href="Vip.dc.html" style="min-height: 32px; display: flex; align-items: center; color: #F2C46D">Get VIP</a>
+</div>
+<p style="margin: 0; font-size: 11px; color: #8E8794; text-align: center; line-height: 1.5">Paid through Google Play or the App Store. Coins don't expire. <a href="About.dc.html">Terms</a></p>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { pick: 1 }; }
+  renderVals() {
+    const data = [
+      { coins: 100, bonus: 0, price: '$0.99', tag: '' },
+      { coins: 500, bonus: 50, price: '$4.99', tag: 'Popular' },
+      { coins: 1000, bonus: 150, price: '$9.99', tag: '' },
+      { coins: 2000, bonus: 400, price: '$19.99', tag: '' },
+      { coins: 5000, bonus: 1500, price: '$49.99', tag: 'Best value' },
+      { coins: 10000, bonus: 4000, price: '$99.99', tag: '' }
+    ];
+    const packs = data.map((d, i) => {
+      const on = this.state.pick === i;
+      return Object.assign({}, d, { sel: on ? 'true' : 'false', ring: on ? '#FF5C7A' : 'transparent', bg: on ? '#2E1520' : '#262029', pick: () => this.setState({ pick: i }) });
+    });
+    const cur = data[this.state.pick];
+    return { packs, cta: 'Buy ' + (cur.coins + cur.bonus) + ' coins · ' + cur.price };
+  }
+}
+</script>
+</body>
+</html>

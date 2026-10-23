@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Edit profile</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button,input{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="padding: 50px 8px 0 4px; height: 94px; box-sizing: border-box; display: flex; align-items: center">
+<a href="Me.dc.html" aria-label="Back" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<h1 style="flex: 1; margin: 0; font-size: 17px; font-weight: 800; text-align: center">Edit profile</h1>
+<a href="Me.dc.html" style="width: 52px; height: 44px; display: flex; align-items: center; justify-content: flex-end; font-size: 15px; font-weight: 700; text-decoration: none">Save</a>
+</header>
+<main style="padding: 12px 16px 0; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 10px">
+<span aria-hidden="true" style="width: 88px; height: 88px; border-radius: 44px; background: #7A3546; display: flex; align-items: center; justify-content: center; font-size: 34px; font-weight: 800">M</span>
+<button type="button" style="height: 36px; background: none; border: none; color: #FF5C7A; font-size: 14px; font-weight: 700">Change photo</button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="nm" style="font-size: 13px; font-weight: 600; color: #B0A8B4">Display name</label>
+<input id="nm" type="text" value="Mya Thandar" maxlength="30" style="height: 50px; border-radius: 14px; border: 1.5px solid #3A3340; background: #1B1720; color: #FFFFFF; font-size: 16px; padding: 0 14px; outline: none">
+<span style="font-size: 12px; color: #8E8794">Shown on your comments.</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="em" style="font-size: 13px; font-weight: 600; color: #B0A8B4">Email</label>
+<input id="em" type="email" value="mya.thandar@gmail.com" readonly="readonly" style="height: 50px; border-radius: 14px; border: 1.5px solid #262029; background: #15121A; color: #B0A8B4; font-size: 16px; padding: 0 14px; outline: none">
+</div>
+<section aria-labelledby="la" style="display: flex; flex-direction: column">
+<h2 id="la" style="margin: 0 0 4px; font-size: 13px; font-weight: 600; color: #B0A8B4">Sign-in methods</h2>
+<div style="min-height: 52px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #1B1720; font-size: 15px">
+<span style="flex: 1">Google</span><span style="font-size: 14px; color: #8E8794">Connected</span></div>
+<div style="min-height: 52px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #1B1720; font-size: 15px">
+<span style="flex: 1">Email code</span><span style="font-size: 14px; color: #8E8794">Connected</span></div>
+<sc-if value="{{ ios }}" hint-placeholder-val="{{ true }}">
+<div style="min-height: 52px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #1B1720; font-size: 15px">
+<span style="flex: 1">Apple</span><button type="button" style="height: 32px; padding: 0 14px; border-radius: 16px; border: none; background: #262029; color: #FFFFFF; font-size: 13px; font-weight: 700">Connect</button></div>
+</sc-if>
+</section>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<a href="Logout.dc.html" style="min-height: 48px; display: flex; align-items: center; color: #FFFFFF; font-size: 15px; font-weight: 600; text-decoration: none">Sign out</a>
+<a href="DeleteAccount.dc.html" style="min-height: 48px; display: flex; align-items: center; color: #FF8FA0; font-size: 15px; font-weight: 600; text-decoration: none">Delete account</a>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"ios":{"editor":"boolean","default":true},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { ios: this.props.ios ?? true };
+  }
+}
+</script>
+</body>
+</html>

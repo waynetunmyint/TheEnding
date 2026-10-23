@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rewards · check-in + tasks</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="padding: 54px 16px 0; display: flex; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px">Rewards</h1>
+<a href="Wallet.dc.html" style="height: 36px; padding: 0 12px; border-radius: 18px; background: #1B1720; color: #FFFFFF; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 800; text-decoration: none">
+<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#FFB020"></circle><circle cx="12" cy="12" r="6.5" fill="none" stroke="#B26F00" stroke-width="1.6"></circle></svg>245
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8E8794" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></a>
+</header>
+
+<main style="position: absolute; top: 108px; left: 0; right: 0; bottom: 124px; overflow: hidden; display: flex; flex-direction: column; gap: 22px; padding: 6px 16px 0">
+<section aria-labelledby="ci" style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: baseline; justify-content: space-between">
+<h2 id="ci" style="margin: 0; font-size: 18px; font-weight: 800">Daily check-in</h2>
+<span style="font-size: 13px; color: #FFC46B; font-weight: 600">3-day streak</span>
+</div>
+<ol style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
+<li aria-label="{{ d.label }}" style="height: 76px; border-radius: 12px; background: {{ d.bg }}; border: 1.5px solid {{ d.ring }}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; box-sizing: border-box">
+<sc-if value="{{ d.done }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8E8794" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></sc-if>
+<sc-if value="{{ d.todo }}"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#FFB020"></circle><circle cx="12" cy="12" r="6.5" fill="none" stroke="#B26F00" stroke-width="1.6"></circle></svg></sc-if>
+<span style="font-size: 12px; font-weight: 800; color: {{ d.fg }}">+{{ d.amt }}</span>
+<span style="font-size: 10px; color: #8E8794">{{ d.day }}</span>
+</li>
+</sc-for>
+</ol>
+<a href="CheckIn.dc.html" style="height: 50px; border-radius: 25px; background: #E0245E; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-decoration: none">Check in · +15 coins</a>
+</section>
+
+<section aria-labelledby="tk" style="display: flex; flex-direction: column">
+<h2 id="tk" style="margin: 0 0 4px; font-size: 18px; font-weight: 800">Tasks</h2>
+<ul style="list-style: none; margin: 0; padding: 0">
+<sc-for list="{{ tasks }}" as="t" hint-placeholder-count="5">
+<li style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1B1720">
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 15px; font-weight: 600">{{ t.name }}</div>
+<div style="font-size: 13px; color: #FFC46B; font-weight: 600">+{{ t.amt }} coins<span style="color: #8E8794; font-weight: 500">{{ t.prog }}</span></div>
+</div>
+<a href="{{ t.href }}" aria-disabled="{{ t.disabled }}" style="flex: none; min-width: 72px; height: 34px; padding: 0 14px; box-sizing: border-box; border-radius: 17px; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-decoration: none">{{ t.cta }}</a>
+</li>
+</sc-for>
+</ul>
+</section>
+</main>
+<div style="position: absolute; left: 0; right: 0; bottom: 0">
+<dc-import name="BottomBar" active="rewards" sub="none" hint-size="390px,124px"></dc-import>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const amts = [10, 10, 15, 15, 20, 20, 50];
+    const days = amts.map((amt, i) => {
+      const done = i < 3, today = i === 3;
+      return {
+        amt, done, todo: !done, day: today ? 'Today' : 'Day ' + (i + 1),
+        label: 'Day ' + (i + 1) + ', ' + amt + ' coins' + (done ? ', claimed' : ''),
+        bg: today ? '#2E1520' : '#1B1720', ring: today ? '#FF5C7A' : 'transparent',
+        fg: done ? '#8E8794' : (i === 6 ? '#FFC46B' : '#FFFFFF')
+      };
+    });
+    const go = { bg: '#E0245E', fg: '#FFFFFF', disabled: 'false' };
+    const claim = { bg: '#F2C46D', fg: '#2A1A00', disabled: 'false' };
+    const done = { bg: '#1B1720', fg: '#8E8794', disabled: 'true', href: 'Rewards.dc.html' };
+    const tasks = [
+      Object.assign({ name: 'Watch a short ad', amt: 20, prog: ' · 1/3 today', cta: 'Watch', href: 'AdReward.dc.html' }, go),
+      Object.assign({ name: 'Watch 30 minutes today', amt: 30, prog: ' · 12/30 min', cta: 'Go', href: 'Shorts.dc.html' }, go),
+      Object.assign({ name: 'Turn on notifications', amt: 20, prog: '', cta: 'Claim', href: 'CheckIn.dc.html' }, claim),
+      Object.assign({ name: 'Invite a friend', amt: 50, prog: '', cta: 'Invite', href: 'Share.dc.html' }, go),
+      Object.assign({ name: 'Sign in with Google or email', amt: 30, prog: '', cta: 'Done' }, done)
+    ];
+    return { days, tasks };
+  }
+}
+</script>
+</body>
+</html>

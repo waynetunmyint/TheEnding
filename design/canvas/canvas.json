@@ -63,7 +63,7 @@
     "DeleteAccount.dc.html": {"x": 4700, "y": 4920, "w": 390, "h": 844, "title": "Delete account"},
 
     "BottomBar.dc.html": {"x": 0, "y": 6150, "w": 390, "h": 124, "title": "Component · subscription bar + tab bar"},
-    "SubStates.dc.html": {"x": 470, "y": 6150, "w": 390, "h": 620, "title": "Subscription bar · all states"}
+    "SubStates.dc.html": {"x": 470, "y": 6150, "w": 390, "h": 1180, "title": "Subscription bar · all states"}
   },
   "order": [
     "Main.dc.html", "Onboarding.dc.html", "Login.dc.html", "LoginEmail.dc.html", "LoginOtp.dc.html", "LoginOtpError.dc.html", "LoginEmbedded.dc.html", "NotifyOptIn.dc.html", "UpdateDialog.dc.html",

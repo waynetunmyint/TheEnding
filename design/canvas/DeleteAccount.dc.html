@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Delete account</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button,input{font-family:inherit}
+input::placeholder{color:#6E6874}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="padding: 50px 8px 0 4px; height: 94px; box-sizing: border-box; display: flex; align-items: center">
+<a href="EditProfile.dc.html" aria-label="Back" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<h1 style="flex: 1; margin: 0 52px 0 0; font-size: 17px; font-weight: 800; text-align: center">Delete account</h1>
+</header>
+<main style="padding: 8px 20px 0; display: flex; flex-direction: column; gap: 18px">
+<h2 style="margin: 0; font-size: 22px; font-weight: 800; line-height: 1.3">This permanently deletes your account</h2>
+<ul style="margin: 0; padding: 0 0 0 18px; display: flex; flex-direction: column; gap: 10px; font-size: 15px; color: #D7D0DA; line-height: 1.45">
+<li>Your profile, comments, list and watch history</li>
+<li>245 coins and every episode you unlocked</li>
+<li>Sign-in with Google and email for this account</li>
+</ul>
+<div style="padding: 14px 16px; border-radius: 14px; background: #2A2112; color: #F2C46D; font-size: 14px; line-height: 1.5">VIP is billed by Google Play or the App Store. Cancel it there first, or it keeps renewing.</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="cf" style="font-size: 14px; color: #B0A8B4">Type DELETE to confirm</label>
+<input id="cf" type="text" autocomplete="off" placeholder="DELETE" value="{{ typed }}" onChange="{{ onType }}" style="height: 50px; border-radius: 14px; border: 1.5px solid #3A3340; background: #1B1720; color: #FFFFFF; font-size: 16px; padding: 0 14px; outline: none; letter-spacing: 1px">
+</div>
+</main>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 20px 40px; display: flex; flex-direction: column; gap: 8px">
+<button type="button" disabled="{{ disabled }}" style="height: 54px; border-radius: 27px; border: none; background: {{ btnBg }}; color: {{ btnFg }}; font-size: 16px; font-weight: 700">Delete my account</button>
+<a href="EditProfile.dc.html" style="height: 44px; color: #FFFFFF; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; text-decoration: none">Keep my account</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { typed: '' }; }
+  renderVals() {
+    const ok = this.state.typed.trim().toUpperCase() === 'DELETE';
+    return {
+      typed: this.state.typed,
+      onType: (e) => this.setState({ typed: e.target.value }),
+      disabled: !ok,
+      btnBg: ok ? '#C21D3F' : '#262029', btnFg: ok ? '#FFFFFF' : '#6E6874'
+    };
+  }
+}
+</script>
+</body>
+</html>

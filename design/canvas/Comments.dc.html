@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Comments sheet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button,textarea{font-family:inherit}
+textarea::placeholder{color:#8E8794}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #000000; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<dc-import name="Player" hint-size="390px,844px"></dc-import>
+<a href="Player.dc.html" aria-label="Close comments" style="position: absolute; inset: 0; background: rgba(5, 3, 6, 0.55)"></a>
+<section role="dialog" aria-labelledby="cm" style="position: absolute; left: 0; right: 0; bottom: 0; height: 600px; background: #1B1720; border-radius: 20px 20px 0 0; display: flex; flex-direction: column">
+<div style="padding: 8px 16px 0; display: flex; flex-direction: column">
+<div style="align-self: center; width: 36px; height: 4px; border-radius: 2px; background: #3A3340"></div>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 id="cm" style="margin: 0; font-size: 17px; font-weight: 800">Comments on EP 4</h2>
+<a href="Player.dc.html" aria-label="Close" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-end; color: #B0A8B4">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a>
+</div>
+</div>
+<ul style="list-style: none; margin: 0; padding: 4px 16px; flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 18px">
+<sc-for list="{{ items }}" as="c" hint-placeholder-count="5">
+<li style="display: flex; gap: 10px">
+<span aria-hidden="true" style="flex: none; width: 36px; height: 36px; border-radius: 18px; background: {{ c.av }}; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800">{{ c.i }}</span>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 13px; color: #B0A8B4; font-weight: 600">{{ c.name }}</div>
+<div style="font-size: 15px; line-height: 1.45">{{ c.text }}</div>
+<div style="display: flex; gap: 14px; font-size: 12px; color: #8E8794; margin-top: 2px"><span>{{ c.date }}</span><span>Reply</span></div>
+</div>
+<button type="button" aria-label="Like comment" style="flex: none; width: 44px; height: 44px; margin: -6px -10px 0 0; background: none; border: none; color: {{ c.lc }}; display: flex; align-items: flex-start; justify-content: center; padding-top: 6px; cursor: pointer">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="{{ c.lf }}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"></path></svg></button>
+</li>
+</sc-for>
+</ul>
+<div style="padding: 10px 12px 34px; display: flex; align-items: flex-end; gap: 8px; border-top: 1px solid #262029">
+<label style="flex: 1; min-height: 42px; border-radius: 21px; background: #262029; display: flex; align-items: center; padding: 0 16px">
+<textarea rows="1" aria-label="Add a comment" placeholder="Add a comment…" style="flex: 1; resize: none; background: none; border: none; outline: none; color: #FFFFFF; font-size: 15px; line-height: 20px; padding: 11px 0; max-height: 100px"></textarea>
+</label>
+<button type="button" aria-label="Send" disabled="disabled" style="width: 42px; height: 42px; border-radius: 21px; border: none; background: none; color: #4A4350; display: flex; align-items: center; justify-content: center">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 12 20 4l-6 16-3-7z"></path></svg></button>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const off = { lc: '#8E8794', lf: 'none' }, on = { lc: '#FF3D5E', lf: '#FF3D5E' };
+    return {
+      items: [
+        Object.assign({ i: 'M', av: '#7A3546', name: 'Mya', text: 'He finally noticed her! I screamed at 0:58', date: '22/10/2026' }, on),
+        Object.assign({ i: 'Z', av: '#2F5480', name: 'Ko Zaw', text: 'The ex-fiancée is going to regret this so much.', date: '22/10/2026' }, off),
+        Object.assign({ i: 'L', av: '#3E6651', name: 'Lin', text: 'Who else unlocked all 80 in one night?', date: '21/10/2026' }, off),
+        Object.assign({ i: 'S', av: '#52407E', name: 'Su Su', text: 'The contract scene in EP 1 hits different now.', date: '21/10/2026' }, on),
+        Object.assign({ i: 'A', av: '#80532F', name: 'Aung', text: 'Need season 2 please', date: '20/10/2026' }, off)
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

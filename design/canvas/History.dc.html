@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My List · history</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="padding: 54px 16px 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px">My List</h1>
+<button type="button" style="height: 44px; background: none; border: none; color: #B0A8B4; font-size: 15px; font-weight: 600; padding: 0">Clear</button>
+</div>
+<nav aria-label="My List sections" style="display: flex; gap: 22px">
+<a href="MyList.dc.html" style="height: 36px; color: #8E8794; font-size: 16px; font-weight: 600; text-decoration: none">Saved</a>
+<a href="History.dc.html" aria-current="page" style="height: 36px; color: #FFFFFF; font-size: 16px; font-weight: 800; text-decoration: none; box-shadow: inset 0 -3px 0 #FF3D5E">History</a>
+</nav>
+</header>
+<main style="position: absolute; top: 160px; left: 16px; right: 16px; bottom: 124px; overflow: hidden; display: flex; flex-direction: column; gap: 6px">
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+<section style="display: flex; flex-direction: column">
+<h2 style="margin: 8px 0 4px; font-size: 13px; font-weight: 700; color: #8E8794">{{ g.day }}</h2>
+<sc-for list="{{ g.rows }}" as="d" hint-placeholder-count="2">
+<div style="display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #1B1720">
+<div style="flex: none; position: relative; width: 60px; height: 80px; border-radius: 8px; overflow: hidden; background: {{ d.c }}">
+<div style="position: absolute; width: 64px; height: 64px; border-radius: 50%; right: -16px; top: -12px; background: {{ d.c2 }}"></div>
+</div>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ d.t }}</div>
+<div style="font-size: 13px; color: #8E8794">{{ d.where }}</div>
+<div style="height: 3px; border-radius: 2px; background: #262029; width: 120px"><div style="height: 3px; border-radius: 2px; width: {{ d.pct }}; background: #FF3D5E"></div></div>
+</div>
+<a href="Player.dc.html" style="flex: none; height: 34px; padding: 0 14px; border-radius: 17px; background: #2E1520; color: #FF5C7A; font-size: 13px; font-weight: 700; display: flex; align-items: center; text-decoration: none">{{ d.cta }}</a>
+</div>
+</sc-for>
+</section>
+</sc-for>
+</main>
+<div style="position: absolute; left: 0; right: 0; bottom: 0">
+<dc-import name="BottomBar" active="mylist" sub="active" hint-size="390px,124px"></dc-import>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const r = (t, c, c2, at, ep, cta) => ({ t, c, c2, cta, where: 'EP ' + at + ' of ' + ep, pct: Math.round(at / ep * 100) + '%' });
+    return {
+      groups: [
+        { day: 'Today', rows: [
+          r("Divorced, Now I'm the CEO", '#5E3A1F', '#80532F', 34, 90, 'Continue'),
+          r("The Alpha King's Lost Mate", '#2C4A3A', '#3E6651', 12, 68, 'Continue')
+        ] },
+        { day: 'Yesterday', rows: [
+          r('Reborn to Rule the Empire', '#3B2A5E', '#52407E', 61, 72, 'Continue'),
+          r("The Billionaire's Contract Bride", '#5B2333', '#7A3546', 80, 80, 'Rewatch')
+        ] },
+        { day: '19/10/2026', rows: [
+          r('Hidden Master of the Night Market', '#26324F', '#38486F', 5, 64, 'Continue')
+        ] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

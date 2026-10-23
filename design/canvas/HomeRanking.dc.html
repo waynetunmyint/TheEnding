@@ -45,7 +45,7 @@ button{font-family:inherit;cursor:pointer}
 <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
 <div style="font-size: 15px; font-weight: 700; line-height: 1.3">{{ d.t }}</div>
 <div style="font-size: 12px; color: #8E8794">{{ d.g }} · {{ d.ep }} EP</div>
-<div style="font-size: 12px; color: #FFC46B; font-weight: 600">{{ d.note }}</div>
+<sc-if value="{{ d.note }}" hint-placeholder-val="{{ true }}"><div style="font-size: 12px; color: #FFC46B; font-weight: 600">{{ d.note }}</div></sc-if>
 </div>
 <a href="Player.dc.html" aria-label="Play {{ d.t }}" style="flex: none; width: 44px; height: 44px; border-radius: 22px; background: #2E1520; display: flex; align-items: center; justify-content: center">
 <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="#FF5C7A"></path></svg>

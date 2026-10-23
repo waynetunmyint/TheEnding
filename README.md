@@ -19,7 +19,7 @@ All platforms live in this one repository.
 
 Design phase. No app code yet.
 
-- Screen design: in progress in Claude Design. See [docs/DESIGN.md](docs/DESIGN.md) for the full screen inventory and progress.
+- Screen design: complete in Claude Design (54 artboards). See [docs/DESIGN.md](docs/DESIGN.md) for the full screen inventory and progress.
 - Design source: [design/canvas/](design/canvas/) (Claude Design `.dc.html` artboards).
 - Logo: [design/logo/](design/logo/).
 

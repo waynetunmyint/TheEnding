@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wallet · coin records</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="padding: 50px 8px 0 4px; height: 94px; box-sizing: border-box; display: flex; align-items: center">
+<a href="Me.dc.html" aria-label="Back" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<h1 style="flex: 1; margin: 0 52px 0 0; font-size: 17px; font-weight: 800; text-align: center">Wallet</h1>
+</header>
+<div style="padding: 8px 16px 18px; display: flex; align-items: center; gap: 12px">
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 13px; color: #B0A8B4">Coins</div>
+<div style="display: flex; align-items: center; gap: 8px; font-size: 32px; font-weight: 900">
+<svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#FFB020"></circle><circle cx="12" cy="12" r="6.5" fill="none" stroke="#B26F00" stroke-width="1.6"></circle></svg>245</div>
+</div>
+<a href="Store.dc.html" style="height: 44px; padding: 0 20px; border-radius: 22px; background: #E0245E; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; text-decoration: none">Top up</a>
+</div>
+<div role="tablist" aria-label="Record type" style="display: flex; gap: 22px; padding: 0 16px; border-bottom: 1px solid #1B1720">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+<button type="button" role="tab" aria-selected="{{ t.sel }}" onClick="{{ t.pick }}" style="height: 40px; background: none; border: none; padding: 0; font-size: 15px; font-weight: 700; color: {{ t.fg }}; box-shadow: inset 0 -2px 0 {{ t.line }}">{{ t.label }}</button>
+</sc-for>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0 16px">
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="7">
+<li style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1B1720">
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ r.what }}</div>
+<div style="font-size: 12px; color: #8E8794">{{ r.when }}</div>
+</div>
+<div style="font-size: 16px; font-weight: 800; color: {{ r.fg }}">{{ r.amt }}</div>
+</li>
+</sc-for>
+</ul>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { tab: 'All' }; }
+  renderVals() {
+    const tabs = ['All', 'Earned', 'Spent'].map((label) => {
+      const on = this.state.tab === label;
+      return { label, sel: on ? 'true' : 'false', fg: on ? '#FFFFFF' : '#8E8794', line: on ? '#FF3D5E' : 'transparent', pick: () => this.setState({ tab: label }) };
+    });
+    const all = [
+      { what: 'Daily check-in · day 4', when: '23/10/2026 · 9:12 AM', n: 15 },
+      { what: "Unlocked EP 35 · Divorced, Now I'm the CEO", when: '22/10/2026 · 11:48 PM', n: -60 },
+      { what: "Unlocked EP 34 · Divorced, Now I'm the CEO", when: '22/10/2026 · 11:45 PM', n: -60 },
+      { what: 'Watched a short ad', when: '22/10/2026 · 8:30 PM', n: 20 },
+      { what: 'Bought 550 coins', when: '21/10/2026 · 2:41 PM', n: 550 },
+      { what: 'Invited a friend', when: '20/10/2026 · 6:05 PM', n: 50 },
+      { what: "Unlocked EP 13 · The Alpha King's Lost Mate", when: '19/10/2026 · 10:20 PM', n: -60 }
+    ];
+    const t = this.state.tab;
+    const rows = all.filter((r) => t === 'All' || (t === 'Earned' ? r.n > 0 : r.n < 0)).map((r) => Object.assign({}, r, {
+      amt: (r.n > 0 ? '+' : '−') + Math.abs(r.n), fg: r.n > 0 ? '#FFC46B' : '#B0A8B4'
+    }));
+    return { tabs, rows };
+  }
+}
+</script>
+</body>
+</html>

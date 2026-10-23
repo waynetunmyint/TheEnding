@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Search · results</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button,input{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; display: flex; flex-direction: column">
+<header style="padding: 50px 8px 0 4px; display: flex; align-items: center; gap: 4px">
+<a href="Search.dc.html" aria-label="Back" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+</a>
+<label style="flex: 1; height: 42px; border-radius: 21px; background: #1B1720; display: flex; align-items: center; gap: 8px; padding: 0 6px 0 14px; color: #8E8794">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+<input type="search" aria-label="Search dramas" value="CEO" style="flex: 1; min-width: 0; background: none; border: none; outline: none; color: #FFFFFF; font-size: 15px">
+<a href="Search.dc.html" aria-label="Clear" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #8E8794"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a>
+</label>
+<a href="Search.dc.html" style="height: 44px; padding: 0 8px; display: flex; align-items: center; color: #FFFFFF; font-size: 15px; font-weight: 600; text-decoration: none">Cancel</a>
+</header>
+<div style="padding: 16px 16px 4px; font-size: 13px; color: #8E8794">12 dramas</div>
+<ul style="list-style: none; margin: 0; padding: 0 16px; display: flex; flex-direction: column">
+<sc-for list="{{ items }}" as="d" hint-placeholder-count="5">
+<li style="display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1B1720">
+<a href="Detail.dc.html" aria-label="{{ d.t }}" style="flex: none; position: relative; width: 84px; height: 112px; border-radius: 10px; overflow: hidden; background: {{ d.c }}">
+<div style="position: absolute; width: 90px; height: 90px; border-radius: 50%; right: -22px; top: -16px; background: {{ d.c2 }}"></div>
+</a>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 15px; font-weight: 700; line-height: 1.3">{{ d.pre }}<span style="color: #FF5C7A">CEO</span>{{ d.post }}</div>
+<div style="font-size: 12px; color: #8E8794">{{ d.g }} · {{ d.ep }} EP</div>
+<div style="font-size: 13px; color: #B0A8B4; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{ d.desc }}</div>
+</div>
+<a href="Player.dc.html" style="flex: none; align-self: center; height: 34px; padding: 0 14px; border-radius: 17px; background: #E0245E; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; text-decoration: none">Watch</a>
+</li>
+</sc-for>
+</ul>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      items: [
+        { pre: "Divorced, Now I'm the ", post: '', g: 'Revenge · Urban', ep: 90, c: '#5E3A1F', c2: '#80532F', desc: 'Thrown out after three years of marriage, she returns as the head of the company that owns his.' },
+        { pre: 'The ', post: "'s Contract Bride", g: 'Romance', ep: 80, c: '#5B2333', c2: '#7A3546', desc: 'A one-year contract marriage to save her family turns into something neither of them planned.' },
+        { pre: 'My Secret ', post: ' Husband', g: 'Hidden identity', ep: 64, c: '#26324F', c2: '#38486F', desc: 'Her quiet husband drives a taxi. Or so she thinks, until the board meeting.' },
+        { pre: 'The ', post: ' Who Lost Everything', g: 'Rebirth', ep: 70, c: '#3B2A5E', c2: '#52407E', desc: 'Betrayed and bankrupt, he wakes up ten years earlier with one chance to fix it.' },
+        { pre: 'Falling for the Cold ', post: '', g: 'Sweet love', ep: 56, c: '#4A1F3D', c2: '#683058', desc: 'An intern, a coffee spill, and the coldest boss in the city.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

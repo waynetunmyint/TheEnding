@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Episode list sheet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #000000; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<dc-import name="Player" hint-size="390px,844px"></dc-import>
+<a href="Player.dc.html" aria-label="Close episode list" style="position: absolute; inset: 0; background: rgba(5, 3, 6, 0.55)"></a>
+<section role="dialog" aria-labelledby="el" style="position: absolute; left: 0; right: 0; bottom: 0; height: 560px; background: #1B1720; border-radius: 20px 20px 0 0; padding: 8px 16px 34px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+<div style="align-self: center; width: 36px; height: 4px; border-radius: 2px; background: #3A3340"></div>
+<div style="display: flex; gap: 12px; align-items: center">
+<div style="flex: none; position: relative; width: 48px; height: 64px; border-radius: 8px; overflow: hidden; background: #5B2333"><div style="position: absolute; width: 50px; height: 50px; border-radius: 50%; right: -14px; top: -10px; background: #7A3546"></div></div>
+<div style="flex: 1; min-width: 0">
+<h2 id="el" style="margin: 0; font-size: 16px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">The Billionaire's Contract Bride</h2>
+<div style="font-size: 13px; color: #8E8794; margin-top: 3px">80 episodes · Completed</div>
+</div>
+<a href="Player.dc.html" aria-label="Close" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-end; color: #B0A8B4">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a>
+</div>
+<div role="tablist" aria-label="Episode range" style="display: flex; gap: 20px; border-bottom: 1px solid #262029">
+<sc-for list="{{ ranges }}" as="r" hint-placeholder-count="3">
+<button type="button" role="tab" aria-selected="{{ r.sel }}" onClick="{{ r.pick }}" style="height: 40px; background: none; border: none; padding: 0; font-size: 15px; font-weight: 700; color: {{ r.fg }}; box-shadow: inset 0 -2px 0 {{ r.line }}">{{ r.label }}</button>
+</sc-for>
+</div>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{ eps }}" as="e" hint-placeholder-count="30">
+<a href="{{ e.href }}" aria-label="{{ e.label }}" style="position: relative; height: 48px; border-radius: 10px; background: {{ e.bg }}; color: {{ e.fg }}; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; text-decoration: none">
+<sc-if value="{{ e.playing }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="#FF5C7A" aria-hidden="true"><rect x="4" y="8" width="3" height="12" rx="1"></rect><rect x="10.5" y="4" width="3" height="16" rx="1"></rect><rect x="17" y="10" width="3" height="10" rx="1"></rect></svg></sc-if>
+<sc-if value="{{ e.notPlaying }}"><span>{{ e.n }}</span></sc-if>
+<sc-if value="{{ e.locked }}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#8E8794" stroke-width="2.6" stroke-linecap="round" aria-hidden="true" style="position: absolute; top: 4px; right: 4px"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></sc-if>
+</a>
+</sc-for>
+</div>
+<div style="display: flex; gap: 16px; font-size: 12px; color: #8E8794; margin-top: auto">
+<span style="display: flex; align-items: center; gap: 5px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #2E1520"></span>Playing</span>
+<span style="display: flex; align-items: center; gap: 5px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #262029"></span>Free or unlocked</span>
+<span style="display: flex; align-items: center; gap: 5px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#8E8794" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>Locked</span>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { range: 0 }; }
+  renderVals() {
+    const labels = ['1–30', '31–60', '61–80'];
+    const ranges = labels.map((label, i) => {
+      const on = this.state.range === i;
+      return { label, sel: on ? 'true' : 'false', fg: on ? '#FFFFFF' : '#8E8794', line: on ? '#FF3D5E' : 'transparent', pick: () => this.setState({ range: i }) };
+    });
+    const start = [1, 31, 61][this.state.range], end = [30, 60, 80][this.state.range];
+    const eps = [];
+    for (let n = start; n <= end; n++) {
+      const playing = n === 4, locked = n > 12, watched = n < 4;
+      eps.push({
+        n, playing, notPlaying: !playing, locked,
+        label: 'Episode ' + n + (playing ? ', playing' : '') + (locked ? ', locked' : ''),
+        href: locked ? 'Unlock.dc.html' : 'Player.dc.html',
+        bg: playing ? '#2E1520' : '#262029',
+        fg: watched ? '#8E8794' : '#FFFFFF'
+      });
+    }
+    return { ranges, eps };
+  }
+}
+</script>
+</body>
+</html>

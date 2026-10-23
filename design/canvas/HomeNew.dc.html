@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home · New releases</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="position: absolute; top: 0; left: 0; right: 0; z-index: 2; padding: 50px 12px 0 16px; height: 98px; box-sizing: border-box; display: flex; align-items: center; gap: 18px; background: #0F0C11">
+<nav aria-label="Home sections" style="display: flex; align-items: baseline; gap: 18px; flex: 1">
+<a href="Home.dc.html" style="color: #8E8794; font-size: 16px; font-weight: 600; text-decoration: none">For You</a>
+<a href="HomeRanking.dc.html" style="color: #8E8794; font-size: 16px; font-weight: 600; text-decoration: none">Rankings</a>
+<a href="HomeNew.dc.html" aria-current="page" style="color: #FFFFFF; font-size: 20px; font-weight: 800; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 4px">New<span style="width: 16px; height: 3px; border-radius: 2px; background: #FF3D5E"></span></a>
+<a href="Category.dc.html" style="color: #8E8794; font-size: 16px; font-weight: 600; text-decoration: none">Genres</a>
+</nav>
+<a href="Search.dc.html" aria-label="Search" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+</a>
+</header>
+
+<main style="position: absolute; top: 98px; left: 0; right: 0; bottom: 124px; overflow: hidden; display: flex; flex-direction: column; gap: 24px; padding-top: 6px">
+<section aria-labelledby="cs" style="display: flex; flex-direction: column; gap: 12px">
+<h2 id="cs" style="margin: 0; padding: 0 16px; font-size: 18px; font-weight: 800">Coming soon</h2>
+<div style="display: flex; gap: 12px; padding: 0 16px">
+<sc-for list="{{ soon }}" as="d" hint-placeholder-count="2">
+<div style="flex: none; width: 250px; display: flex; gap: 12px">
+<div style="flex: none; position: relative; width: 84px; height: 112px; border-radius: 10px; overflow: hidden; background: {{ d.c }}">
+<div style="position: absolute; width: 90px; height: 90px; border-radius: 50%; right: -22px; top: -16px; background: {{ d.c2 }}"></div>
+</div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<div style="font-size: 12px; font-weight: 700; color: #FFC46B">{{ d.date }}</div>
+<div style="font-size: 15px; font-weight: 700; line-height: 1.3">{{ d.t }}</div>
+<button type="button" onClick="{{ d.toggle }}" style="margin-top: auto; align-self: flex-start; height: 34px; padding: 0 14px; border-radius: 17px; border: none; font-size: 13px; font-weight: 700; background: {{ d.bg }}; color: {{ d.fg }}">{{ d.label }}</button>
+</div>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section aria-labelledby="ot" style="display: flex; flex-direction: column; gap: 12px; padding: 0 16px">
+<h2 id="ot" style="margin: 0; font-size: 18px; font-weight: 800">Out this week</h2>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{ week }}" as="d" hint-placeholder-count="6">
+<a href="Detail.dc.html" style="display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: #FFFFFF">
+<div style="position: relative; height: 150px; border-radius: 10px; overflow: hidden; background: {{ d.c }}">
+<div style="position: absolute; width: 120px; height: 120px; border-radius: 50%; right: -30px; top: -20px; background: {{ d.c2 }}"></div>
+<span style="position: absolute; top: 0; left: 0; padding: 3px 7px; border-radius: 0 0 8px 0; font-size: 10px; font-weight: 800; background: #1D64D8; color: #FFFFFF">New</span>
+<span style="position: absolute; right: 6px; bottom: 6px; font-size: 10px; font-weight: 600; background: rgba(15, 12, 17, 0.6); padding: 2px 6px; border-radius: 6px">{{ d.ep }} EP</span>
+</div>
+<div style="font-size: 13px; font-weight: 600; line-height: 1.3">{{ d.t }}</div>
+<div style="font-size: 12px; color: #8E8794; margin-top: -2px">{{ d.date }}</div>
+</a>
+</sc-for>
+</div>
+</section>
+</main>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 0">
+<dc-import name="BottomBar" active="home" sub="none" hint-size="390px,124px"></dc-import>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { reminded: ['s1'] }; }
+  renderVals() {
+    const r = this.state.reminded;
+    const soon = [
+      { id: 's1', t: 'The Duke Who Married a Maid', date: 'Out 25/10/2026', c: '#3A2A4E', c2: '#52406E' },
+      { id: 's2', t: 'My Ex-Husband Begs Again', date: 'Out 28/10/2026', c: '#4E2A2A', c2: '#6E3D3D' }
+    ].map((d) => {
+      const on = r.includes(d.id);
+      return Object.assign({}, d, {
+        label: on ? 'Reminder set' : 'Remind me', bg: on ? '#26202A' : '#E0245E', fg: on ? '#B0A8B4' : '#FFFFFF',
+        toggle: () => this.setState({ reminded: on ? r.filter((x) => x !== d.id) : r.concat(d.id) })
+      });
+    });
+    const week = [
+      { t: 'My Bodyguard Is a Hidden Heir', c: '#1F3A5B', c2: '#2F5480', ep: 60, date: '22/10/2026' },
+      { t: 'Revenge of the True Daughter', c: '#4A1F3D', c2: '#683058', ep: 75, date: '21/10/2026' },
+      { t: 'Love Contract With My Rival', c: '#5A2A2A', c2: '#7A3D3D', ep: 58, date: '20/10/2026' },
+      { t: "The Emperor's Runaway Bride", c: '#4D3B1E', c2: '#6E552D', ep: 82, date: '19/10/2026' },
+      { t: 'Hidden Master of the Night Market', c: '#26324F', c2: '#38486F', ep: 64, date: '18/10/2026' },
+      { t: "The Alpha King's Lost Mate", c: '#2C4A3A', c2: '#3E6651', ep: 68, date: '17/10/2026' }
+    ];
+    return { soon, week };
+  }
+}
+</script>
+</body>
+</html>

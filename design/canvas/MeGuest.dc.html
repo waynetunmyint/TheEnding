@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Me · guest</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<main style="position: absolute; top: 0; left: 0; right: 0; bottom: 124px; overflow: hidden; padding: 60px 16px 0; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; align-items: center; gap: 14px">
+<span aria-hidden="true" style="width: 64px; height: 64px; border-radius: 32px; background: #1B1720; color: #8E8794; display: flex; align-items: center; justify-content: center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg></span>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 20px; font-weight: 800">Guest</span>
+<span style="font-size: 13px; color: #8E8794">Progress is saved on this device only</span>
+</span>
+</div>
+<div style="padding: 18px; border-radius: 16px; background: #2E1520; display: flex; flex-direction: column; gap: 12px">
+<div style="font-size: 17px; font-weight: 800">Sign in to keep your coins safe</div>
+<div style="font-size: 14px; color: #D7C3CB; line-height: 1.5">Sync your list and progress across phone and web, and get 30 bonus coins.</div>
+<a href="Login.dc.html" style="height: 48px; border-radius: 24px; background: #E0245E; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-decoration: none">Sign in</a>
+</div>
+<nav aria-label="Account" style="display: flex; flex-direction: column">
+<sc-for list="{{ rows }}" as="r" hint-placeholder-count="4">
+<a href="{{ r.href }}" style="min-height: 52px; display: flex; align-items: center; gap: 14px; color: #FFFFFF; text-decoration: none; border-bottom: 1px solid #1B1720; font-size: 15px">
+<span style="flex: 1">{{ r.label }}</span>
+<sc-if value="{{ r.value }}"><span style="color: #8E8794; font-size: 14px">{{ r.value }}</span></sc-if>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8E8794" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg>
+</a>
+</sc-for>
+</nav>
+</main>
+<div style="position: absolute; left: 0; right: 0; bottom: 0">
+<dc-import name="BottomBar" active="me" sub="none" hint-size="390px,124px"></dc-import>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      rows: [
+        { label: 'Language', href: 'Language.dc.html', value: 'English' },
+        { label: 'Settings', href: 'Settings.dc.html', value: '' },
+        { label: 'Help & feedback', href: 'Help.dc.html', value: '' },
+        { label: 'About', href: 'About.dc.html', value: '' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

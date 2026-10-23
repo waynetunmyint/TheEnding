@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Payment · pending</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; display: flex; flex-direction: column">
+<header style="padding: 50px 4px 0; height: 94px; box-sizing: border-box; display: flex; align-items: center">
+<a href="Store.dc.html" aria-label="Close" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a>
+</header>
+<div role="status" style="padding: 36px 32px 0; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center">
+<div style="width: 80px; height: 80px; border-radius: 40px; background: {{ v.iconBg }}; color: {{ v.iconFg }}; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{ v.ok }}"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></sc-if>
+<sc-if value="{{ v.pending }}"><div style="width: 34px; height: 34px; border-radius: 50%; border: 3px solid rgba(156, 195, 255, 0.25); border-top-color: #9CC3FF; animation: spin 1s linear infinite"></div></sc-if>
+<sc-if value="{{ v.failed }}"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></sc-if>
+</div>
+<h1 style="margin: 10px 0 0; font-size: 24px; font-weight: 800">{{ v.title }}</h1>
+<p style="margin: 0; font-size: 15px; color: #B0A8B4; line-height: 1.5">{{ v.body }}</p>
+</div>
+<dl style="margin: 28px 20px 0; display: flex; flex-direction: column">
+<sc-for list="{{ v.rows }}" as="r" hint-placeholder-count="4">
+<div style="display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #1B1720; font-size: 14px">
+<dt style="color: #8E8794">{{ r.k }}</dt><dd style="margin: 0; font-weight: 600; text-align: right">{{ r.v }}</dd>
+</div>
+</sc-for>
+</dl>
+<div style="margin-top: auto; padding: 0 20px 40px; display: flex; flex-direction: column; gap: 10px">
+<a href="{{ v.primaryHref }}" style="height: 54px; border-radius: 27px; background: #E0245E; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-decoration: none">{{ v.primary }}</a>
+<a href="{{ v.secondaryHref }}" style="height: 44px; color: #B0A8B4; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; text-decoration: none">{{ v.secondary }}</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"kind":{"editor":"enum","options":["success","pending","failed"],"default":"pending"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const kind = this.props.kind ?? 'pending';
+    const base = [
+      { k: 'Item', v: '550 coins (500 + 50 bonus)' },
+      { k: 'Amount', v: '$4.99' },
+      { k: 'Date', v: '23/10/2026 · 2:41 PM' },
+      { k: 'Order', v: 'GPA.3312-7781-4420' }
+    ];
+    const views = {
+      success: {
+        ok: true, pending: false, failed: false, iconBg: '#2E1520', iconFg: '#FF5C7A',
+        title: '550 coins added', body: 'Your new balance is 795 coins. Enjoy the next episode.',
+        rows: base, primary: 'Back to watching', primaryHref: 'Player.dc.html', secondary: 'View coin records', secondaryHref: 'Wallet.dc.html'
+      },
+      pending: {
+        ok: false, pending: true, failed: false, iconBg: '#1E2533', iconFg: '#9CC3FF',
+        title: 'Payment pending', body: "Your store is still confirming this payment. Coins are added the moment it clears. You don't need to pay again.",
+        rows: base, primary: 'Keep watching', primaryHref: 'Home.dc.html', secondary: 'Check status later in Wallet', secondaryHref: 'Wallet.dc.html'
+      },
+      failed: {
+        ok: false, pending: false, failed: true, iconBg: '#2B1A1E', iconFg: '#FF8FA0',
+        title: "Payment didn't go through", body: 'You were not charged. Check your payment method in Google Play or the App Store and try again.',
+        rows: base.slice(0, 3), primary: 'Try again', primaryHref: 'Store.dc.html', secondary: 'Get help', secondaryHref: 'Help.dc.html'
+      }
+    };
+    return { v: views[kind] || views.success };
+  }
+}
+</script>
+</body>
+</html>

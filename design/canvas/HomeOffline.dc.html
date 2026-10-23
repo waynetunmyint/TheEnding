@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home · offline / error</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="position: absolute; top: 0; left: 0; right: 0; padding: 50px 12px 0 16px; height: 98px; box-sizing: border-box; display: flex; align-items: center; gap: 18px">
+<nav aria-label="Home sections" style="display: flex; align-items: baseline; gap: 18px; flex: 1">
+<a href="Home.dc.html" aria-current="page" style="color: #FFFFFF; font-size: 20px; font-weight: 800; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 4px">For You<span style="width: 16px; height: 3px; border-radius: 2px; background: #FF3D5E"></span></a>
+<a href="HomeRanking.dc.html" style="color: #8E8794; font-size: 16px; font-weight: 600; text-decoration: none">Rankings</a>
+<a href="HomeNew.dc.html" style="color: #8E8794; font-size: 16px; font-weight: 600; text-decoration: none">New</a>
+<a href="Category.dc.html" style="color: #8E8794; font-size: 16px; font-weight: 600; text-decoration: none">Genres</a>
+</nav>
+</header>
+<main style="position: absolute; top: 98px; left: 0; right: 0; bottom: 84px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 0 40px; text-align: center">
+<div style="width: 72px; height: 72px; border-radius: 36px; background: #1B1720; color: #B0A8B4; display: flex; align-items: center; justify-content: center">
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18M8.5 12.6a5 5 0 0 1 5.6-1M5 9.2A10 10 0 0 1 9.4 6.6M19 9.2a10 10 0 0 0-4.6-2.7M12 18h.01"></path></svg>
+</div>
+<h1 style="margin: 8px 0 0; font-size: {{ titleSize }}; font-weight: 800">{{ title }}</h1>
+<p style="margin: 0; font-size: 15px; color: #B0A8B4; line-height: 1.5">{{ body }}</p>
+<button type="button" style="margin-top: 12px; height: 48px; padding: 0 32px; border-radius: 24px; border: none; background: #E0245E; color: #FFFFFF; font-size: 16px; font-weight: 700">Try again</button></main>
+<div style="position: absolute; left: 0; right: 0; bottom: 0">
+<dc-import name="BottomBar" active="home" sub="hidden" hint-size="390px,84px"></dc-import>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"kind":{"editor":"enum","options":["offline","server error"],"default":"offline"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const off = (this.props.kind ?? 'offline') === 'offline';
+    return {
+      titleSize: '22px',
+      title: off ? "You're offline" : 'Something went wrong',
+      body: off ? 'Check your Wi-Fi or mobile data, then try again. Your progress is saved.' : "We couldn't load your feed. Please try again in a moment."
+    };
+  }
+}
+</script>
+</body>
+</html>

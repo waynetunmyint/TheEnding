@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My List · saved</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="padding: 54px 16px 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px">My List</h1>
+<button type="button" style="height: 44px; background: none; border: none; color: #B0A8B4; font-size: 15px; font-weight: 600; padding: 0">Edit</button>
+</div>
+<nav aria-label="My List sections" style="display: flex; gap: 22px">
+<a href="MyList.dc.html" aria-current="page" style="height: 36px; color: #FFFFFF; font-size: 16px; font-weight: 800; text-decoration: none; box-shadow: inset 0 -3px 0 #FF3D5E">Saved</a>
+<a href="History.dc.html" style="height: 36px; color: #8E8794; font-size: 16px; font-weight: 600; text-decoration: none">History</a>
+</nav>
+</header>
+<main style="position: absolute; top: 160px; left: 16px; right: 16px; bottom: 124px; overflow: hidden">
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 10px">
+<sc-for list="{{ items }}" as="d" hint-placeholder-count="6">
+<a href="Player.dc.html" style="display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: #FFFFFF">
+<div style="position: relative; height: 150px; border-radius: 10px; overflow: hidden; background: {{ d.c }}">
+<div style="position: absolute; width: 120px; height: 120px; border-radius: 50%; right: -30px; top: -20px; background: {{ d.c2 }}"></div>
+<sc-if value="{{ d.fresh }}"><span style="position: absolute; top: 0; left: 0; padding: 3px 7px; border-radius: 0 0 8px 0; font-size: 10px; font-weight: 800; background: #E0245E">New EP</span></sc-if>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255, 255, 255, 0.25)"><div style="height: 3px; width: {{ d.pct }}; background: #FF3D5E"></div></div>
+</div>
+<div style="font-size: 13px; font-weight: 600; line-height: 1.3">{{ d.t }}</div>
+<div style="font-size: 12px; color: #8E8794; margin-top: -2px">{{ d.prog }}</div>
+</a>
+</sc-for>
+</div>
+</main>
+<div style="position: absolute; left: 0; right: 0; bottom: 0">
+<dc-import name="BottomBar" active="mylist" sub="active" hint-size="390px,124px"></dc-import>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const mk = (t, c, c2, at, ep, fresh) => ({ t, c, c2, fresh, pct: Math.round(at / ep * 100) + '%', prog: at === 0 ? 'Not started' : 'EP ' + at + ' / ' + ep });
+    return {
+      items: [
+        mk("Divorced, Now I'm the CEO", '#5E3A1F', '#80532F', 34, 90, true),
+        mk("The Alpha King's Lost Mate", '#2C4A3A', '#3E6651', 12, 68, false),
+        mk('Reborn to Rule the Empire', '#3B2A5E', '#52407E', 61, 72, true),
+        mk("The Billionaire's Contract Bride", '#5B2333', '#7A3546', 80, 80, false),
+        mk('The Duke Who Married a Maid', '#3A2A4E', '#52406E', 0, 66, false),
+        mk('Hidden Master of the Night Market', '#26324F', '#38486F', 5, 64, false)
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

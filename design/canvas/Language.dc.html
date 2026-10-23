@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Language</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="padding: 50px 8px 0 4px; height: 94px; box-sizing: border-box; display: flex; align-items: center">
+<a href="Settings.dc.html" aria-label="Back" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<h1 style="flex: 1; margin: 0 52px 0 0; font-size: 17px; font-weight: 800; text-align: center">Language</h1>
+</header>
+<div role="radiogroup" aria-label="App language" style="padding: 0 16px; display: flex; flex-direction: column">
+<sc-for list="{{ langs }}" as="l" hint-placeholder-count="8">
+<button type="button" role="radio" aria-checked="{{ l.sel }}" onClick="{{ l.pick }}" lang="{{ l.code }}" style="min-height: 56px; background: none; border: none; border-bottom: 1px solid #1B1720; padding: 0; color: #FFFFFF; display: flex; align-items: center; gap: 12px; text-align: left">
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 16px; font-weight: 600">{{ l.name }}</span>
+<span style="font-size: 13px; color: #8E8794">{{ l.en }}</span>
+</span>
+<sc-if value="{{ l.on }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF5C7A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"></path></svg></sc-if>
+</button>
+</sc-for>
+</div>
+<p style="margin: 16px 16px 0; font-size: 13px; color: #8E8794; line-height: 1.5">Subtitles follow this language when the drama offers it.</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { pick: 'en' }; }
+  renderVals() {
+    const all = [
+      ['en', 'English', 'English'], ['my', 'မြန်မာ', 'Burmese'], ['th', 'ไทย', 'Thai'], ['vi', 'Tiếng Việt', 'Vietnamese'],
+      ['id', 'Bahasa Indonesia', 'Indonesian'], ['zh', '中文', 'Chinese'], ['es', 'Español', 'Spanish'], ['pt', 'Português', 'Portuguese']
+    ];
+    const langs = all.map(([code, name, en]) => {
+      const on = this.state.pick === code;
+      return { code, name, en, on, sel: on ? 'true' : 'false', pick: () => this.setState({ pick: code }) };
+    });
+    return { langs };
+  }
+}
+</script>
+</body>
+</html>

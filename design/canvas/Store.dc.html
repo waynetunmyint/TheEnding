@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Coin store</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="padding: 50px 8px 0 4px; height: 94px; box-sizing: border-box; display: flex; align-items: center">
+<a href="Me.dc.html" aria-label="Back" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<h1 style="flex: 1; margin: 0; font-size: 17px; font-weight: 800; text-align: center">Coin Store</h1>
+<a href="Wallet.dc.html" style="width: 64px; height: 44px; display: flex; align-items: center; justify-content: flex-end; color: #B0A8B4; font-size: 15px; text-decoration: none">Records</a>
+</header>
+
+<main style="padding: 8px 16px 0; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="font-size: 13px; color: #B0A8B4">Your balance</div>
+<div style="display: flex; align-items: center; gap: 8px; font-size: 34px; font-weight: 900">
+<svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#FFB020"></circle><circle cx="12" cy="12" r="6.5" fill="none" stroke="#B26F00" stroke-width="1.6"></circle></svg>245</div>
+<div style="font-size: 13px; color: #8E8794">Most episodes cost 60 coins.</div>
+</div>
+
+<a href="Vip.dc.html" style="padding: 14px 16px; border-radius: 16px; background: #2A2112; color: #F2C46D; text-decoration: none; display: flex; align-items: center; gap: 12px">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="#F2C46D" aria-hidden="true"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 800">VIP watches everything</span><span style="font-size: 13px; color: #D9B571">Cheaper than coins if you binge</span></span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></a>
+
+<div role="radiogroup" aria-label="Coin packs" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{ packs }}" as="p" hint-placeholder-count="6">
+<button type="button" role="radio" aria-checked="{{ p.sel }}" onClick="{{ p.pick }}" style="position: relative; height: 92px; border-radius: 16px; border: 2px solid {{ p.ring }}; background: {{ p.bg }}; color: #FFFFFF; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; padding: 0 14px; text-align: left">
+<sc-if value="{{ p.tag }}"><span style="position: absolute; top: -1px; right: -1px; font-size: 10px; font-weight: 800; padding: 3px 7px; border-radius: 0 14px 0 8px; background: #E0245E">{{ p.tag }}</span></sc-if>
+<span style="display: flex; align-items: center; gap: 6px; font-size: 20px; font-weight: 800">
+<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#FFB020"></circle><circle cx="12" cy="12" r="6.5" fill="none" stroke="#B26F00" stroke-width="1.6"></circle></svg>{{ p.coins }}<sc-if value="{{ p.bonus }}"><span style="font-size: 13px; color: #FFC46B">+{{ p.bonus }}</span></sc-if></span>
+<span style="font-size: 14px; color: #B0A8B4; font-weight: 600">{{ p.price }}</span>
+</button>
+</sc-for>
+</div>
+</main>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 16px 34px; background: #0F0C11; display: flex; flex-direction: column; gap: 10px">
+<a href="PaySuccess.dc.html" style="height: 54px; border-radius: 27px; background: #E0245E; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-decoration: none">{{ cta }}</a>
+<div style="display: flex; justify-content: center; gap: 18px; font-size: 12px">
+<button type="button" style="background: none; border: none; color: #B0A8B4; font-size: 12px; min-height: 32px; padding: 0">Restore purchases</button>
+<a href="About.dc.html" style="min-height: 32px; display: flex; align-items: center; color: #B0A8B4">Coin terms</a>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { pick: 1 }; }
+  renderVals() {
+    const data = [
+      { coins: 100, bonus: 100, price: '$0.99', tag: 'First top-up x2' },
+      { coins: 500, bonus: 50, price: '$4.99', tag: 'Popular' },
+      { coins: 1000, bonus: 150, price: '$9.99', tag: '' },
+      { coins: 2000, bonus: 400, price: '$19.99', tag: '' },
+      { coins: 5000, bonus: 1500, price: '$49.99', tag: 'Best value' },
+      { coins: 10000, bonus: 4000, price: '$99.99', tag: '' }
+    ];
+    const packs = data.map((d, i) => {
+      const on = this.state.pick === i;
+      return Object.assign({}, d, { sel: on ? 'true' : 'false', ring: on ? '#FF5C7A' : 'transparent', bg: on ? '#2E1520' : '#1B1720', pick: () => this.setState({ pick: i }) });
+    });
+    const cur = data[this.state.pick];
+    return { packs, cta: 'Pay ' + cur.price + ' · get ' + (cur.coins + cur.bonus) + ' coins' };
+  }
+}
+</script>
+</body>
+</html>

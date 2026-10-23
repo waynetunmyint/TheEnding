@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Player · paused + settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #000000; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<dc-import name="Player" hint-size="390px,844px"></dc-import>
+<div style="position: absolute; inset: 0; background: rgba(5, 3, 6, 0.55)"></div>
+<a href="Player.dc.html" aria-label="Resume" style="position: absolute; left: 50%; top: 250px; width: 72px; height: 72px; margin-left: -36px; border-radius: 36px; background: rgba(15, 12, 17, 0.6); display: flex; align-items: center; justify-content: center">
+<svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="#FFFFFF"></path></svg></a>
+
+<section role="dialog" aria-labelledby="ps" style="position: absolute; left: 0; right: 0; bottom: 0; background: #1B1720; border-radius: 20px 20px 0 0; padding: 8px 20px 40px; display: flex; flex-direction: column; gap: 18px">
+<div style="align-self: center; width: 36px; height: 4px; border-radius: 2px; background: #3A3340"></div>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 id="ps" style="margin: 0; font-size: 18px; font-weight: 800">Playback</h2>
+<a href="Player.dc.html" aria-label="Close" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-end; color: #B0A8B4">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a>
+</div>
+<sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="font-size: 13px; font-weight: 600; color: #B0A8B4">{{ g.name }}</div>
+<div role="radiogroup" aria-label="{{ g.name }}" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{ g.opts }}" as="o" hint-placeholder-count="5">
+<button type="button" role="radio" aria-checked="{{ o.sel }}" onClick="{{ o.pick }}" style="height: 40px; border-radius: 12px; border: none; font-size: 14px; font-weight: 700; background: {{ o.bg }}; color: {{ o.fg }}; display: flex; align-items: center; justify-content: center; gap: 3px">{{ o.label }}<sc-if value="{{ o.vip }}"><span style="font-size: 9px; font-weight: 800; color: #2A1A00; background: #F2C46D; padding: 1px 4px; border-radius: 4px">VIP</span></sc-if></button>
+</sc-for>
+</div>
+</div>
+</sc-for>
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 44px">
+<label for="ap" style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 15px; font-weight: 600">Autoplay next episode</span>
+<span style="font-size: 13px; color: #8E8794">Stops before a locked episode</span>
+</label>
+<button id="ap" type="button" role="switch" aria-checked="{{ apStr }}" onClick="{{ toggleAp }}" style="width: 52px; height: 32px; border-radius: 16px; border: none; padding: 3px; background: {{ apBg }}; display: flex; justify-content: {{ apJustify }}">
+<span style="width: 26px; height: 26px; border-radius: 13px; background: #FFFFFF"></span></button>
+</div>
+<a href="Help.dc.html" style="min-height: 44px; display: flex; align-items: center; justify-content: space-between; color: #FFFFFF; text-decoration: none; font-size: 15px; font-weight: 600">Report a playback problem
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8E8794" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></a>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { Speed: '1.0x', Quality: 'Auto', ap: true }; }
+  renderVals() {
+    const defs = [['Speed', ['0.75x', '1.0x', '1.25x', '1.5x', '2.0x'], []], ['Quality', ['Auto', '480p', '720p', '1080p', '4K'], ['1080p', '4K']]];
+    const groups = defs.map(([name, opts, vipOpts]) => ({
+      name,
+      opts: opts.map((label) => {
+        const on = this.state[name] === label;
+        return { label, vip: vipOpts.includes(label), sel: on ? 'true' : 'false', bg: on ? '#E0245E' : '#262029', fg: '#FFFFFF', pick: () => this.setState({ [name]: label }) };
+      })
+    }));
+    const ap = this.state.ap;
+    return {
+      groups, apStr: ap ? 'true' : 'false', apBg: ap ? '#E0245E' : '#3A3340', apJustify: ap ? 'flex-end' : 'flex-start',
+      toggleAp: () => this.setState({ ap: !ap })
+    };
+  }
+}
+</script>
+</body>
+</html>

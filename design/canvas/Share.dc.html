@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Share sheet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #000000; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<dc-import name="Player" hint-size="390px,844px"></dc-import>
+<a href="Player.dc.html" aria-label="Close share" style="position: absolute; inset: 0; background: rgba(5, 3, 6, 0.55)"></a>
+<section role="dialog" aria-labelledby="sh" style="position: absolute; left: 0; right: 0; bottom: 0; background: #1B1720; border-radius: 20px 20px 0 0; padding: 8px 16px 36px; display: flex; flex-direction: column; gap: 18px">
+<div style="align-self: center; width: 36px; height: 4px; border-radius: 2px; background: #3A3340"></div>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 id="sh" style="margin: 0; font-size: 17px; font-weight: 800">Share EP 4</h2>
+<a href="Player.dc.html" aria-label="Close" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-end; color: #B0A8B4">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a>
+</div>
+<a href="Rewards.dc.html" style="padding: 14px 16px; border-radius: 16px; background: #2E1520; color: #FFFFFF; text-decoration: none; display: flex; align-items: center; gap: 12px">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FF5C7A" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="2"></rect><path d="M12 8v13M3 12h18M12 8C10 4 6 4 6 6.5S9 8 12 8zm0 0c2-4 6-4 6-1.5S15 8 12 8z"></path></svg>
+<span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 15px; font-weight: 700">Invite a friend, both get 50 coins</span>
+<span style="font-size: 13px; color: #B0A8B4">When they sign up with your link</span>
+</span></a>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 8px">
+<sc-for list="{{ targets }}" as="t" hint-placeholder-count="8">
+<button type="button" style="background: none; border: none; color: #E6E0E8; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; padding: 0">
+<span aria-hidden="true" style="width: 54px; height: 54px; border-radius: 27px; background: {{ t.bg }}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800">{{ t.i }}</span>{{ t.name }}</button>
+</sc-for>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      targets: [
+        { name: 'Facebook', i: 'f', bg: '#1A5BD6' },
+        { name: 'Messenger', i: 'm', bg: '#7A3BD6' },
+        { name: 'Telegram', i: 't', bg: '#1E7FB8' },
+        { name: 'Viber', i: 'v', bg: '#6A3FA0' },
+        { name: 'WhatsApp', i: 'w', bg: '#1C8A4A' },
+        { name: 'TikTok', i: 'tt', bg: '#262029' },
+        { name: 'Copy link', i: '⧉', bg: '#262029' },
+        { name: 'More', i: '•••', bg: '#262029' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

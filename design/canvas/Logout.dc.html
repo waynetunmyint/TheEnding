@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sign out confirm</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<dc-import name="Me" hint-size="390px,844px"></dc-import>
+<div style="position: absolute; inset: 0; background: rgba(5, 3, 6, 0.72); display: flex; align-items: center; justify-content: center; padding: 0 28px">
+<div role="alertdialog" aria-labelledby="lo" aria-describedby="lod" style="width: 100%; background: #1B1720; border-radius: 24px; padding: 26px 24px 18px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center">
+<h2 id="lo" style="margin: 0; font-size: 20px; font-weight: 800">Sign out?</h2>
+<p id="lod" style="margin: 0; font-size: 15px; color: #B0A8B4; line-height: 1.5">Your coins, VIP and list stay safe in your account. Sign in again any time to get them back.</p>
+<a href="MeGuest.dc.html" style="margin-top: 10px; width: 100%; height: 50px; border-radius: 25px; background: #262029; color: #FF8FA0; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-decoration: none">Sign out</a>
+<a href="Me.dc.html" style="width: 100%; height: 44px; color: #FFFFFF; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; text-decoration: none">Cancel</a>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Subscription bar states</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+svg{display:block}
+</style>
+</helmet>
+<div style="width: 390px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; padding: 24px 0 8px; display: flex; flex-direction: column; gap: 24px">
+<div style="padding: 0 16px; display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 20px; font-weight: 800">Subscription bar</h1>
+<p style="margin: 0; font-size: 13px; color: #B0A8B4; line-height: 1.5">Sits on the tab bar on every tab screen. State comes from the backend. Hidden while loading, offline, on error and for banned accounts. Tap opens VIP.</p>
+</div>
+<sc-for list="{{ states }}" as="s" hint-placeholder-count="6">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="padding: 0 16px; font-size: 12px; font-weight: 700; color: #8E8794; text-transform: uppercase; letter-spacing: 0.5px">{{ s.label }}</div>
+<dc-import name="BottomBar" active="home" sub="{{ s.key }}" hint-size="390px,124px"></dc-import>
+</div>
+</sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      states: [
+        { key: 'none', label: 'Not subscribed' },
+        { key: 'pending', label: 'Payment pending' },
+        { key: 'active', label: 'Active' },
+        { key: 'ending', label: 'Ending soon (7 days or fewer, non-renewing)' },
+        { key: 'expired', label: 'Expired' },
+        { key: 'rejected', label: 'Payment declined' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

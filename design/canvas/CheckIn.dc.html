@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Check-in reward</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<dc-import name="Rewards" hint-size="390px,844px"></dc-import>
+<div style="position: absolute; inset: 0; background: rgba(5, 3, 6, 0.75); display: flex; align-items: center; justify-content: center; padding: 0 28px">
+<div role="dialog" aria-labelledby="ck" style="width: 100%; background: #1B1720; border-radius: 24px; padding: 28px 24px 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center">
+<svg width="72" height="72" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#FFB020"></circle><circle cx="12" cy="12" r="6.5" fill="none" stroke="#B26F00" stroke-width="1.2"></circle><path d="M12 8.5v7" stroke="#B26F00" stroke-width="1.4" stroke-linecap="round"></path></svg>
+<h2 id="ck" style="margin: 6px 0 0; font-size: 28px; font-weight: 900; color: #FFC46B">+15 coins</h2>
+<p style="margin: 0; font-size: 15px; color: #B0A8B4; line-height: 1.5">Day 4 checked in. Come back tomorrow for +20.</p>
+<a href="AdReward.dc.html" style="margin-top: 10px; width: 100%; height: 50px; border-radius: 25px; background: #E0245E; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="13" rx="2"></rect><path d="M8 21h8M10 9l4 2.5-4 2.5z"></path></svg>
+Double it · watch an ad</a>
+<a href="Rewards.dc.html" style="width: 100%; height: 44px; color: #B0A8B4; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; text-decoration: none">Collect +15</a>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

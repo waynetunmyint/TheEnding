@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Help &amp; feedback</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button,textarea,select{font-family:inherit}
+textarea::placeholder{color:#8E8794}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<header style="padding: 50px 8px 0 4px; height: 94px; box-sizing: border-box; display: flex; align-items: center">
+<a href="Me.dc.html" aria-label="Back" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #FFFFFF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg></a>
+<h1 style="flex: 1; margin: 0 52px 0 0; font-size: 17px; font-weight: 800; text-align: center">Help &amp; feedback</h1>
+</header>
+<main style="padding: 0 16px; display: flex; flex-direction: column; gap: 22px">
+<section aria-labelledby="fq" style="display: flex; flex-direction: column">
+<h2 id="fq" style="margin: 0 0 2px; font-size: 13px; font-weight: 600; color: #8E8794">Common questions</h2>
+<sc-for list="{{ faqs }}" as="f" hint-placeholder-count="5">
+<div style="border-bottom: 1px solid #1B1720">
+<button type="button" aria-expanded="{{ f.exp }}" onClick="{{ f.toggle }}" style="width: 100%; min-height: 52px; background: none; border: none; padding: 0; color: #FFFFFF; display: flex; align-items: center; gap: 12px; text-align: left; font-size: 15px; cursor: pointer">
+<span style="flex: 1">{{ f.q }}</span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8E8794" stroke-width="2.4" stroke-linecap="round" aria-hidden="true" style="transform: rotate({{ f.rot }})"><path d="m6 9 6 6 6-6"></path></svg></button>
+<sc-if value="{{ f.open }}"><p style="margin: 0 0 14px; font-size: 14px; color: #B0A8B4; line-height: 1.55">{{ f.a }}</p></sc-if>
+</div>
+</sc-for>
+</section>
+<section aria-labelledby="ct" style="display: flex; flex-direction: column; gap: 10px">
+<h2 id="ct" style="margin: 0; font-size: 13px; font-weight: 600; color: #8E8794">Still stuck? Write to us</h2>
+<label for="tp" style="font-size: 13px; color: #B0A8B4">Topic</label>
+<select id="tp" style="height: 48px; border-radius: 14px; border: 1.5px solid #3A3340; background: #1B1720; color: #FFFFFF; font-size: 15px; padding: 0 12px">
+<option>Payment or coins</option><option>Playback problem</option><option>Account and sign-in</option><option>Something else</option>
+</select>
+<label for="ms" style="font-size: 13px; color: #B0A8B4">Message</label>
+<textarea id="ms" rows="3" placeholder="Tell us what happened. Include the drama and episode if it's about playback." style="border-radius: 14px; border: 1.5px solid #3A3340; background: #1B1720; color: #FFFFFF; font-size: 15px; padding: 12px; resize: none; outline: none"></textarea>
+<div style="display: flex; gap: 10px">
+<button type="button" style="height: 48px; padding: 0 16px; border-radius: 24px; border: none; background: #1B1720; color: #FFFFFF; font-size: 14px; font-weight: 600">Add screenshot</button>
+<button type="button" style="flex: 1; height: 48px; border-radius: 24px; border: none; background: #E0245E; color: #FFFFFF; font-size: 15px; font-weight: 700">Send</button>
+</div>
+<p style="margin: 0; font-size: 12px; color: #8E8794">We reply by email within 2 working days.</p>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { open: 0 }; }
+  renderVals() {
+    const data = [
+      ['How do coins work?', 'Most episodes cost 60 coins to unlock, forever. Earn free coins from check-ins, tasks and short ads, or buy them in the Coin Store.'],
+      ["I paid but didn't get coins", 'Open Wallet. If the payment shows as pending, coins arrive when your store confirms it. Still missing after an hour? Send us the order number below.'],
+      ['How do I cancel VIP?', 'VIP renews through Google Play or the App Store. Cancel there any time; you keep VIP until the end of the paid period.'],
+      ["A video won't play", 'Try a lower quality in the player menu, check your connection, then restart the app.'],
+      ['Can I watch on the web?', 'Yes. Sign in with the same Google or email account and your list, coins and VIP follow you.']
+    ];
+    const faqs = data.map(([q, a], i) => {
+      const open = this.state.open === i;
+      return { q, a, open, exp: open ? 'true' : 'false', rot: open ? '180deg' : '0deg', toggle: () => this.setState({ open: open ? -1 : i }) };
+    });
+    return { faqs };
+  }
+}
+</script>
+</body>
+</html>
