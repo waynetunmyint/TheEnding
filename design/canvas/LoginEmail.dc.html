@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Login · email</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+input{font-family:inherit}
+input::placeholder{color:#8E8794}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 52px 20px 40px; box-sizing: border-box">
+<a href="Login.dc.html" aria-label="Back" style="width: 44px; height: 44px; display: flex; align-items: center; color: #FFFFFF">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+</a>
+<h1 style="margin: 20px 0 8px; font-size: 28px; font-weight: 800; letter-spacing: -0.5px">Sign in with email</h1>
+<p style="margin: 0 0 32px; font-size: 15px; color: #B0A8B4; line-height: 1.5">We'll email you a 6-digit code. No password needed.</p>
+<label for="email" style="font-size: 13px; font-weight: 600; color: #B0A8B4; margin-bottom: 8px">Email address</label>
+<input id="email" type="email" placeholder="you@example.com" value="mya.thandar@gmail.com" style="height: 52px; border-radius: 14px; border: 1.5px solid #FF5C7A; background: #1B1720; color: #FFFFFF; font-size: 17px; padding: 0 16px; outline: none">
+<div style="flex: 1"></div>
+<a href="LoginOtp.dc.html" style="height: 52px; border-radius: 26px; background: #E0245E; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-decoration: none">Send code</a>
+<p style="margin: 16px 0 0; font-size: 12px; color: #8E8794; text-align: center">The code expires in 10 minutes.</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

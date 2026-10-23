@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Login</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 60px 24px 40px; box-sizing: border-box">
+<div style="display: flex; justify-content: flex-end">
+<a href="Home.dc.html" style="color: #B0A8B4; font-size: 15px; text-decoration: none; padding: 10px 4px">Not now</a>
+</div>
+<div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px">
+<img src="/_blob/7d3062d4b43e05109d1a29b393a0d350" alt="The Ending logo" style="width: 80px; height: 112px; object-fit: contain">
+<div style="font-size: 30px; font-weight: 900; letter-spacing: -1px">The Endıng<span style="color: #FF3D5E">.</span></div>
+<div style="font-size: 15px; color: #B0A8B4; text-align: center; line-height: 1.5; max-width: 280px">Sign in to save your progress, collect coins and continue on any device.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<a href="NotifyOptIn.dc.html" style="height: 52px; border-radius: 26px; background: #FFFFFF; color: #1A1A1A; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none">
+<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z" fill="#4285F4"></path><path d="M12 22c2.7 0 5-.9 6.6-2.5l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z" fill="#34A853"></path><path d="M6.4 13.9a6 6 0 0 1 0-3.8V7.5H3.1a10 10 0 0 0 0 9z" fill="#FBBC05"></path><path d="M12 6c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.5l3.3 2.6C7.2 7.8 9.4 6 12 6z" fill="#EA4335"></path></svg>
+Continue with Google
+</a>
+<sc-if value="{{ ios }}" hint-placeholder-val="{{ true }}">
+<a href="NotifyOptIn.dc.html" style="height: 52px; border-radius: 26px; background: #1B1720; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none">
+<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.2-2.8.8-3.6.8-.7 0-1.9-.8-3.1-.8-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.5.8 1.1 1.7 2.4 3 2.3 1.2 0 1.6-.8 3.1-.8s1.8.8 3.1.8 2.1-1.2 2.9-2.3c.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.6-1-2.6-3.9zM14.1 5.5c.7-.8 1.1-1.9 1-3-1 0-2.1.6-2.8 1.4-.6.7-1.2 1.8-1 2.9 1.1.1 2.1-.5 2.8-1.3z" fill="#FFFFFF"></path></svg>
+Continue with Apple
+</a>
+</sc-if>
+<a href="LoginEmail.dc.html" style="height: 52px; border-radius: 26px; background: #1B1720; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg>
+Continue with email
+</a>
+<p style="margin: 12px 0 0; font-size: 12px; color: #8E8794; text-align: center; line-height: 1.6">By continuing you agree to our <a href="About.dc.html">Terms of Service</a> and <a href="About.dc.html">Privacy Policy</a>.</p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"ios":{"editor":"boolean","default":true},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { ios: this.props.ios ?? true };
+  }
+}
+</script>
+</body>
+</html>

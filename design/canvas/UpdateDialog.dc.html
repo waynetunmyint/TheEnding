@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Update available</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden">
+<dc-import name="Home" hint-size="390px,844px"></dc-import>
+<div style="position: absolute; inset: 0; background: rgba(5, 3, 6, 0.72); display: flex; align-items: center; justify-content: center; padding: 0 28px">
+<div role="dialog" aria-labelledby="ut" style="width: 100%; background: #1B1720; border-radius: 24px; padding: 28px 24px 20px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+<img src="/_blob/7d3062d4b43e05109d1a29b393a0d350" alt="" style="width: 48px; height: 67px; object-fit: contain">
+<h2 id="ut" style="margin: 4px 0 0; font-size: 20px; font-weight: 800">A new version is ready</h2>
+<p style="margin: 0; font-size: 15px; color: #B0A8B4; line-height: 1.5">Version 1.3.0 brings smoother playback and faster episode loading.</p>
+<a href="Home.dc.html" style="margin-top: 8px; width: 100%; height: 50px; border-radius: 25px; background: #E0245E; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-decoration: none">Update now</a>
+<sc-if value="{{ optional }}" hint-placeholder-val="{{ true }}">
+<a href="Home.dc.html" style="width: 100%; height: 44px; color: #B0A8B4; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: center; text-decoration: none">Later</a>
+</sc-if>
+<sc-if value="{{ required }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; font-size: 13px; color: #8E8794">This update is required to keep watching.</p>
+</sc-if>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"required":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const required = this.props.required ?? false;
+    return { required, optional: !required };
+  }
+}
+</script>
+</body>
+</html>

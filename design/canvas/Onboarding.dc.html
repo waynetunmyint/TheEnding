@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Onboarding · pick genres</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#FF5C7A}a:hover{color:#FF8FA0}
+svg{display:block}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; background: #0F0C11; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 60px 20px 40px; box-sizing: border-box">
+<div style="display: flex; justify-content: flex-end">
+<a href="Login.dc.html" style="color: #B0A8B4; font-size: 15px; text-decoration: none; padding: 10px 4px">Skip</a>
+</div>
+<h1 style="margin: 24px 0 8px; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2">What do you love to watch?</h1>
+<p style="margin: 0 0 28px; font-size: 15px; color: #B0A8B4; line-height: 1.5">Pick a few. We'll fill your For You feed with stories like these.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{ genres }}" as="g" hint-placeholder-count="12">
+<button type="button" onClick="{{ g.toggle }}" aria-pressed="{{ g.pressed }}" style="height: 44px; padding: 0 18px; border-radius: 22px; border: none; font-size: 15px; font-weight: 600; background: {{ g.bg }}; color: {{ g.fg }}">{{ g.label }}</button>
+</sc-for>
+</div>
+<div style="flex: 1"></div>
+<div style="font-size: 13px; color: #8E8794; text-align: center; margin-bottom: 12px">{{ countText }}</div>
+<a href="Login.dc.html" style="height: 52px; border-radius: 26px; background: #E0245E; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-decoration: none">Start watching</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { picked: ['Romance', 'CEO', 'Revenge'] }; }
+  renderVals() {
+    const all = ['Romance', 'CEO', 'Revenge', 'Rebirth', 'Werewolf', 'Family', 'Fantasy', 'Thriller', 'Comedy', 'Historical', 'Urban', 'Sweet love', 'Hidden identity', 'Martial arts'];
+    const picked = this.state.picked;
+    const genres = all.map((label) => {
+      const on = picked.includes(label);
+      return {
+        label, pressed: on ? 'true' : 'false',
+        bg: on ? '#E0245E' : '#1B1720', fg: on ? '#FFFFFF' : '#E6E0E8',
+        toggle: () => this.setState({ picked: on ? picked.filter((x) => x !== label) : picked.concat(label) })
+      };
+    });
+    return { genres, countText: picked.length + ' selected' };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+# macOS
+.DS_Store
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p8
+*.p12
+*.mobileprovision
+key.properties
+google-services.json
+GoogleService-Info.plist
+
+# Go
+Go/bin/
+Go/tmp/
+
+# Kotlin / Android
+Kotlin/.gradle/
+Kotlin/build/
+Kotlin/app/build/
+Kotlin/local.properties
+Kotlin/.idea/
+*.apk
+*.aab
+
+# Swift / Xcode
+Swift/DerivedData/
+Swift/build/
+xcuserdata/
+*.xcarchive
+*.ipa
+
+# Next.js
+NextJS/node_modules/
+NextJS/.next/
+NextJS/out/
+NextJS/dist/
+NextJS/next-env.d.ts
