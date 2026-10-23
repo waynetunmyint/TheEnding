@@ -21,7 +21,7 @@ export default function HomePage() {
       <HomeHeader />
       <div className="stack gap-24" style={{ paddingTop: 6 }}>
         <section aria-label="Featured" className="pad">
-          <Link href={`/drama/${hero.id}/`} style={{ display: 'block', position: 'relative', minHeight: 200, aspectRatio: '16 / 8', borderRadius: 16, overflow: 'hidden', background: hero.color, color: '#FFFFFF', textDecoration: 'none' }}>
+          <Link href={`/drama/${hero.id}/`} style={{ display: 'block', position: 'relative', height: 'clamp(200px, 36vw, 400px)', borderRadius: 16, overflow: 'hidden', background: hero.color, color: '#FFFFFF', textDecoration: 'none' }}>
             <div style={{ position: 'absolute', width: '70%', aspectRatio: '1', borderRadius: '50%', right: '-15%', top: '-40%', background: hero.color2 }} />
             <div style={{ position: 'absolute', width: '36%', aspectRatio: '1', borderRadius: '50%', right: '18%', top: '30%', background: '#6A2C3D' }} />
             <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 16, background: 'rgba(15,12,17,.55)', display: 'flex', alignItems: 'flex-end', gap: 12 }}>
