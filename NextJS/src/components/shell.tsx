@@ -79,10 +79,10 @@ function NotifyOptIn() {
   )
 }
 
-export function AppShell({ children, tabs = true }: { children: ReactNode; tabs?: boolean }) {
+export function AppShell({ children, tabs = true, flush = false }: { children: ReactNode; tabs?: boolean; flush?: boolean }) {
   const active = useActiveTab()
   return (
-    <div className={`app${tabs ? '' : ' no-tabs'}`}>
+    <div className={`app${tabs ? '' : ' no-tabs'}${flush ? ' flush' : ''}`}>
       <aside className="sidebar" aria-label="Main">
         <Link href="/" className="brand"><img src="/logo.png" alt="" /><span>The Ending</span></Link>
         <nav className="side-nav">

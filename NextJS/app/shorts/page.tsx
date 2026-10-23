@@ -50,12 +50,11 @@ export default function ShortsPage() {
   const order = ['alpha-king', 'contract-bride', 'hidden-heir', 'true-daughter', 'reborn-empire', 'night-market', 'divorced-ceo', 'rival-contract', 'runaway-bride']
   const items = order.map((id) => PUBLISHED.find((d) => d.id === id)).filter((d): d is Drama => Boolean(d))
   return (
-    <AppShell>
+    <AppShell flush>
       <h1 className="sr-only">Shorts</h1>
-      <div className="shorts-feed" style={{ maxWidth: 480, margin: '0 auto', height: 'calc(100dvh - 156px - env(safe-area-inset-bottom))', overflowY: 'auto', scrollSnapType: 'y mandatory', scrollbarWidth: 'none' }}>
+      <div className="fill-screen" style={{ maxWidth: 480, marginLeft: 'auto', marginRight: 'auto', overflowY: 'auto', scrollSnapType: 'y mandatory', scrollbarWidth: 'none' }}>
         {items.map((d) => <Clip key={d.id} d={d} />)}
       </div>
-      <style>{`@media (min-width: 900px) { .shorts-feed { height: calc(100dvh - 72px) !important; margin-top: 16px !important; border-radius: 16px; } }`}</style>
     </AppShell>
   )
 }
